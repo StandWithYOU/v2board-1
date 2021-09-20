@@ -37,6 +37,7 @@
                 header: '{{$theme_header}}',
                 color: '{{$theme_color}}',
             },
+            description:"管理后台",
             version: '{{$version}}',
             background_url: '{{$backgroun_url}}'
         }
