@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PlanSave;
 use App\Http\Requests\Admin\PlanSort;
 use App\Http\Requests\Admin\PlanUpdate;
+use App\Models\Order;
+use App\Models\Plan;
+use App\Models\User;
 use Exception;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Models\Plan;
-use App\Models\Order;
-use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
@@ -91,38 +91,15 @@ class PlanController extends Controller
             $plan->setAttribute(Plan::FIELD_CONTENT, $reqContent);
         }
 
-        if ($reqMonthPrice !== null) {
-            $plan->setAttribute(Plan::FIELD_MONTH_PRICE, $reqMonthPrice);
-        }
+        $plan->setAttribute(Plan::FIELD_MONTH_PRICE, $reqMonthPrice);
+        $plan->setAttribute(Plan::FIELD_QUARTER_PRICE, $reqQuarterPrice);
+        $plan->setAttribute(Plan::FIELD_HALF_YEAR_PRICE, $reqHalfYearPrice);
+        $plan->setAttribute(Plan::FIELD_YEAR_PRICE, $reqYearPrice);
+        $plan->setAttribute(Plan::FIELD_TWO_YEAR_PRICE, $reqTwoYearPrice);
+        $plan->setAttribute(Plan::FIELD_THREE_YEAR_PRICE, $reqThreeYearPrice);
+        $plan->setAttribute(Plan::FIELD_ONETIME_PRICE, $reqOneTimePrice);
+        $plan->setAttribute(Plan::FIELD_RESET_PRICE, $reqResetPrice);
 
-        if ($reqQuarterPrice !== null) {
-            $plan->setAttribute(Plan::FIELD_QUARTER_PRICE, $reqQuarterPrice);
-        }
-
-
-        if ($reqHalfYearPrice !== null) {
-            $plan->setAttribute(Plan::FIELD_HALF_YEAR_PRICE, $reqHalfYearPrice);
-        }
-
-        if ($reqYearPrice !== null) {
-            $plan->setAttribute(Plan::FIELD_YEAR_PRICE, $reqYearPrice);
-        }
-
-        if ($reqTwoYearPrice !== null) {
-            $plan->setAttribute(Plan::FIELD_TWO_YEAR_PRICE, $reqTwoYearPrice);
-        }
-
-        if (!$reqThreeYearPrice !== null) {
-            $plan->setAttribute(Plan::FIELD_THREE_YEAR_PRICE, $reqThreeYearPrice);
-        }
-
-        if ($reqOneTimePrice !== null) {
-            $plan->setAttribute(Plan::FIELD_ONETIME_PRICE, $reqOneTimePrice);
-        }
-
-        if ($reqResetPrice !== null) {
-            $plan->setAttribute(Plan::FIELD_RESET_PRICE, $reqResetPrice);
-        }
 
         if (!$plan->save()) {
             DB::rollBack();
