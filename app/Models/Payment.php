@@ -2,10 +2,37 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\Serialize;
 
 
+/**
+ * App\Models\Payment
+ *
+ * @property int $id
+ * @property string $uuid
+ * @property string $payment
+ * @property string $name
+ * @property array $config
+ * @property int $enable
+ * @property int|null $sort
+ * @property int $created_at
+ * @property int $updated_at
+ * @method static Builder|Payment newModelQuery()
+ * @method static Builder|Payment newQuery()
+ * @method static Builder|Payment query()
+ * @method static Builder|Payment whereConfig($value)
+ * @method static Builder|Payment whereCreatedAt($value)
+ * @method static Builder|Payment whereEnable($value)
+ * @method static Builder|Payment whereId($value)
+ * @method static Builder|Payment whereName($value)
+ * @method static Builder|Payment wherePayment($value)
+ * @method static Builder|Payment whereSort($value)
+ * @method static Builder|Payment whereUpdatedAt($value)
+ * @method static Builder|Payment whereUuid($value)
+ * @mixin \Eloquent
+ */
 class Payment extends Model
 {
     use Serialize;
@@ -46,7 +73,7 @@ class Payment extends Model
      * find by uuid
      *
      * @param string $uuid
-     * @return mixed
+     * @return Builder|Model|object|Payment|null
      */
     public static function findByUUID(string $uuid)
     {

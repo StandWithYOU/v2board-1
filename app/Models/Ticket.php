@@ -2,9 +2,39 @@
 
 namespace App\Models;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\Serialize;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * App\Models\Ticket
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property int $last_reply_user_id
+ * @property string $subject
+ * @property int $level
+ * @property int $status 0:已开启 1:已关闭
+ * @property int $created_at
+ * @property int $updated_at
+ * @property-read Collection|TicketMessage[] $messages
+ * @property-read int|null $messages_count
+ * @method static Builder|Ticket newModelQuery()
+ * @method static Builder|Ticket newQuery()
+ * @method static Builder|Ticket query()
+ * @method static Builder|Ticket whereCreatedAt($value)
+ * @method static Builder|Ticket whereId($value)
+ * @method static Builder|Ticket whereLastReplyUserId($value)
+ * @method static Builder|Ticket whereLevel($value)
+ * @method static Builder|Ticket whereStatus($value)
+ * @method static Builder|Ticket whereSubject($value)
+ * @method static Builder|Ticket whereUpdatedAt($value)
+ * @method static Builder|Ticket whereUserId($value)
+ * @mixin Eloquent
+ */
 class Ticket extends Model
 {
     use Serialize;
@@ -36,9 +66,9 @@ class Ticket extends Model
     /**
      * ticket messages
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
-    public function messages()
+    public function messages(): HasMany
     {
         return $this->hasMany("App\Models\TicketMessage", TicketMessage::FIELD_TICKET_ID);
     }
@@ -48,7 +78,7 @@ class Ticket extends Model
      *
      * @return TicketMessage
      */
-    public function getLastMessage()
+    public function getLastMessage(): TicketMessage
     {
         return TicketMessage::where(TicketMessage::FIELD_TICKET_ID, $this->getAttribute(self::FIELD_ID))->
         orderBy(TicketMessage::FIELD_ID, "DESC")->first();
@@ -60,7 +90,7 @@ class Ticket extends Model
      *
      * @return bool
      */
-    public function isClosed()
+    public function isClosed(): bool
     {
         return $this->getAttribute(self::FIELD_STATUS) == self::STATUS_CLOSE;
     }
@@ -74,7 +104,7 @@ class Ticket extends Model
      *
      * @return Ticket
      */
-    public static function findFirstByUserId($id, $userId)
+    public static function findFirstByUserId(int $id, int $userId): Ticket
     {
         return self::where([self::FIELD_ID => $id, self::FIELD_USER_ID => $userId])->first();
     }
@@ -83,12 +113,11 @@ class Ticket extends Model
     /**
      * find all Tickets and userId
      *
-     * @param int $id
      * @param int $userId
      *
-     * @return Ticket
+     * @return Builder[]|Collection|\Illuminate\Database\Query\Builder[]|\Illuminate\Support\Collection|Ticket[]
      */
-    public static function findAllByUserId($userId)
+    public static function findAllByUserId(int $userId)
     {
         return self::where([self::FIELD_USER_ID => $userId])->
         orderBy(self::FIELD_CREATED_AT, "DESC")->get();
@@ -97,9 +126,9 @@ class Ticket extends Model
     /**
      * stats ticket pending
      *
-     * @return mixed
+     * @return int
      */
-    public static function countTicketPending()
+    public static function countTicketPending(): int
     {
         return self::where(self::FIELD_STATUS, self::STATUS_OPEN)->count();
     }

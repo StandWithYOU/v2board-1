@@ -17,6 +17,7 @@ use App\Models\User;
 use App\Models\Plan;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class UserController extends Controller
 {
@@ -308,7 +309,7 @@ class UserController extends Controller
      */
     public function dumpCSV(Request $request)
     {
-        $userModel = User::orderBy(User::FIELD_ID, 'asc');
+        $userModel = User::orderBy(User::FIELD_ID);
         $this->_filter($request, $userModel);
         $users = $userModel->get();
         $plans = Plan::get();
@@ -351,7 +352,8 @@ class UserController extends Controller
      * generate
      *
      * @param UserGenerate $request
-     * @return Application|ResponseFactory|Response
+     * @return Application|ResponseFactory|Response | void
+     * @throws Throwable
      */
     public function generate(UserGenerate $request)
     {
@@ -404,6 +406,7 @@ class UserController extends Controller
      *
      * @param Request $request
      * @param $count
+     * @throws Throwable
      */
     private function _multiGenerate(Request $request, $count)
     {
@@ -494,12 +497,12 @@ class UserController extends Controller
     }
 
     /**
-     * ban
+     * batch ban
      *
      * @param Request $request
      * @return Application|ResponseFactory|Response
      */
-    public function ban(Request $request)
+    public function batchBan(Request $request)
     {
         $reqSortType = in_array($request->input('sort_type'), ["ASC", "DESC"]) ? $request->input('sort_type') : "DESC";
         $reqSort = $request->input('sort') ? $request->input('sort') : User::FIELD_CREATED_AT;
@@ -517,4 +520,58 @@ class UserController extends Controller
             'data' => true
         ]);
     }
+
+
+    /**
+     * batch drop
+     *
+     * @param Request $request
+     * @return Application|ResponseFactory|Response
+     */
+    public function batchDrop(Request  $request)
+    {
+
+        return response([
+            'data' => true
+        ]);
+
+    }
+
+    /**
+     * 单个删除
+     *
+     * @param Request $request
+     * @return Application|ResponseFactory|Response
+     * @throws Throwable
+     */
+    public function drop(Request $request)
+    {
+        $reqId = $request->get('id');
+        if ($reqId <= 0) {
+            abort(500, "参数有误");
+        }
+
+        /**
+         * @var User $user
+         */
+        $user = User::find($reqId);
+        if ($user === null) {
+            abort(500, "用户未找到");
+        }
+
+        $inviteUserCount = $user->countInvitedUsers();
+        if ($inviteUserCount > 0) {
+            abort(500, '该用户是邀请人，暂不能删除');
+        }
+
+        if ($user->isAdmin()) {
+            abort(500, '该用户是管理员，暂不能删除');
+        }
+        
+        $user->drop();
+        return response([
+            'data' => true
+        ]);
+    }
+
 }

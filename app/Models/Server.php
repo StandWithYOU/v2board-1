@@ -4,10 +4,60 @@ namespace App\Models;
 
 use App\Models\Traits\Serialize;
 use App\Utils\CacheKey;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use StdClass;
 
+/**
+ * App\Models\Server
+ *
+ * @property int $id
+ * @property array $group_id
+ * @property string $name
+ * @property int|null $parent_id
+ * @property string $host
+ * @property int $port
+ * @property int $server_port
+ * @property array|null $tags
+ * @property string $rate
+ * @property string $network
+ * @property int $tls
+ * @property int $alter_id
+ * @property array|null $network_settings
+ * @property array|null $tls_settings
+ * @property array|null $rule_settings
+ * @property array|null $dns_settings
+ * @property int $show
+ * @property int|null $sort
+ * @property int $created_at
+ * @property int $updated_at
+ * @method static Builder|Server newModelQuery()
+ * @method static Builder|Server newQuery()
+ * @method static Builder|Server query()
+ * @method static Builder|Server whereAlterId($value)
+ * @method static Builder|Server whereCreatedAt($value)
+ * @method static Builder|Server whereDnsSettings($value)
+ * @method static Builder|Server whereGroupId($value)
+ * @method static Builder|Server whereHost($value)
+ * @method static Builder|Server whereId($value)
+ * @method static Builder|Server whereName($value)
+ * @method static Builder|Server whereNetwork($value)
+ * @method static Builder|Server whereNetworkSettings($value)
+ * @method static Builder|Server whereParentId($value)
+ * @method static Builder|Server wherePort($value)
+ * @method static Builder|Server whereRate($value)
+ * @method static Builder|Server whereRuleSettings($value)
+ * @method static Builder|Server whereServerPort($value)
+ * @method static Builder|Server whereShow($value)
+ * @method static Builder|Server whereSort($value)
+ * @method static Builder|Server whereTags($value)
+ * @method static Builder|Server whereTls($value)
+ * @method static Builder|Server whereTlsSettings($value)
+ * @method static Builder|Server whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class Server extends Model
 {
     use Serialize;
@@ -62,7 +112,7 @@ class Server extends Model
      *
      * @return bool
      */
-    public function isShow()
+    public function isShow(): bool
     {
         return (bool)$this->getAttribute(self::FIELD_SHOW);
     }
@@ -70,7 +120,7 @@ class Server extends Model
     /**
      * find available users
      *
-     * @return mixed
+     * @return array|Collection
      */
     public function findAvailableUsers()
     {
@@ -121,6 +171,7 @@ class Server extends Model
                     break;
                 case 'kcp':
                     $json->inbound->streamSettings->kcpSettings = $networkSettings;
+                    break;
                 case 'ws':
                     $json->inbound->streamSettings->wsSettings = $networkSettings;
                     break;
@@ -202,9 +253,9 @@ class Server extends Model
     /**
      * nodes
      *
-     * @return mixed
+     * @return Collection
      */
-    public static function nodes()
+    public static function nodes(): Collection
     {
         $servers = self::orderBy('sort', "ASC")->get();
         foreach ($servers as $server) {
@@ -223,9 +274,9 @@ class Server extends Model
      *
      * @param User $user
      * @param bool $show
-     * @return mixed
+     * @return Collection
      */
-    public static function configs(User $user, bool $show = true)
+    public static function configs(User $user, bool $show = true): Collection
     {
         $servers = self::orderBy(self::FIELD_SORT, "ASC")->where(self::FIELD_SHOW, (int)$show)->get();
 

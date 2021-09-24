@@ -2,9 +2,36 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\Serialize;
 
+/**
+ * App\Models\OrderStat
+ *
+ * @property int $id
+ * @property int $order_count 订单数量
+ * @property int $order_amount 订单合计
+ * @property int $commission_count
+ * @property int $commission_amount 佣金合计
+ * @property string $record_type
+ * @property int $record_at
+ * @property int $created_at
+ * @property int $updated_at
+ * @method static Builder|OrderStat newModelQuery()
+ * @method static Builder|OrderStat newQuery()
+ * @method static Builder|OrderStat query()
+ * @method static Builder|OrderStat whereCommissionAmount($value)
+ * @method static Builder|OrderStat whereCommissionCount($value)
+ * @method static Builder|OrderStat whereCreatedAt($value)
+ * @method static Builder|OrderStat whereId($value)
+ * @method static Builder|OrderStat whereOrderAmount($value)
+ * @method static Builder|OrderStat whereOrderCount($value)
+ * @method static Builder|OrderStat whereRecordAt($value)
+ * @method static Builder|OrderStat whereRecordType($value)
+ * @method static Builder|OrderStat whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class OrderStat extends Model
 {
     use Serialize;

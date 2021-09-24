@@ -3,10 +3,49 @@
 namespace App\Models;
 
 use App\Utils\CacheKey;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Traits\Serialize;
 
+/**
+ * App\Models\ServerShadowsocks
+ *
+ * @property int $id
+ * @property array $group_id
+ * @property int|null $parent_id
+ * @property array|null $tags
+ * @property string $name
+ * @property string $rate
+ * @property string $host
+ * @property int $port
+ * @property int $server_port
+ * @property string $cipher
+ * @property int $show
+ * @property int|null $sort
+ * @property int $created_at
+ * @property int $updated_at
+ * @method static Builder|ServerShadowsocks newModelQuery()
+ * @method static Builder|ServerShadowsocks newQuery()
+ * @method static Builder|ServerShadowsocks query()
+ * @method static Builder|ServerShadowsocks whereCipher($value)
+ * @method static Builder|ServerShadowsocks whereCreatedAt($value)
+ * @method static Builder|ServerShadowsocks whereGroupId($value)
+ * @method static Builder|ServerShadowsocks whereHost($value)
+ * @method static Builder|ServerShadowsocks whereId($value)
+ * @method static Builder|ServerShadowsocks whereName($value)
+ * @method static Builder|ServerShadowsocks whereParentId($value)
+ * @method static Builder|ServerShadowsocks wherePort($value)
+ * @method static Builder|ServerShadowsocks whereRate($value)
+ * @method static Builder|ServerShadowsocks whereServerPort($value)
+ * @method static Builder|ServerShadowsocks whereShow($value)
+ * @method static Builder|ServerShadowsocks whereSort($value)
+ * @method static Builder|ServerShadowsocks whereTags($value)
+ * @method static Builder|ServerShadowsocks whereUpdatedAt($value)
+ * @mixin Eloquent
+ */
 class ServerShadowsocks extends Model
 {
     use Serialize;
@@ -47,7 +86,7 @@ class ServerShadowsocks extends Model
      *
      * @return bool
      */
-    public function isShow()
+    public function isShow(): bool
     {
         return (bool)$this->getAttribute(self::FIELD_SHOW);
     }
@@ -56,7 +95,7 @@ class ServerShadowsocks extends Model
     /**
      * find available users
      *
-     * @return mixed
+     * @return array|Collection
      */
     public function findAvailableUsers()
     {
@@ -68,9 +107,9 @@ class ServerShadowsocks extends Model
     /**
      * nodes
      *
-     * @return mixed
+     * @return Collection
      */
-    public static function nodes()
+    public static function nodes(): Collection
     {
         $servers = self::orderBy('sort', "ASC")->get();
         foreach ($servers as $server) {
@@ -88,9 +127,9 @@ class ServerShadowsocks extends Model
      *
      * @param User $user
      * @param bool $show
-     * @return mixed
+     * @return Collection
      */
-    public static function configs(User $user, bool $show = true)
+    public static function configs(User $user, bool $show = true): Collection
     {
         $servers = self::orderBy(self::FIELD_SORT, "ASC")->where(self::FIELD_SHOW, (int)$show)->get();
 

@@ -4,17 +4,22 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\Admin\ConfigSave;
 use App\Services\TelegramService;
+use Artisan;
+use Config;
+use File;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use App\Utils\Dict;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Response;
 
 class ConfigController extends Controller
+
 {
     /**
      * get email template
      *
-     * @return ResponseFactory|\Illuminate\Http\Response
+     * @return ResponseFactory|Response
      */
     public function emailTemplate()
     {
@@ -56,7 +61,7 @@ class ConfigController extends Controller
 
 
     /**
-     * @return ResponseFactory|\Illuminate\Http\Response
+     * @return ResponseFactory|Response
      */
     public function fetch()
     {
@@ -146,12 +151,12 @@ class ConfigController extends Controller
      * save
      *
      * @param ConfigSave $request
-     * @return ResponseFactory|\Illuminate\Http\Response
+     * @return ResponseFactory|Response
      */
     public function save(ConfigSave $request)
     {
         $data = $request->validated();
-        $array = \Config::get('v2board');
+        $array = Config::get('v2board');
         foreach ($data as $k => $v) {
             if (!in_array($k, array_keys($request->validated()))) {
                 abort(500, '参数' . $k . '不在规则内，禁止修改');
@@ -159,7 +164,7 @@ class ConfigController extends Controller
             $array[$k] = $v;
         }
         $data = var_export($array, 1);
-        if (!\File::put(base_path() . '/config/v2board.php', "<?php\n return $data ;")) {
+        if (!File::put(base_path() . '/config/v2board.php', "<?php\n return $data ;")) {
             abort(500, '修改失败');
         }
         if (function_exists('opcache_reset')) {
@@ -167,7 +172,7 @@ class ConfigController extends Controller
                 abort(500, '缓存清除失败，请卸载或检查opcache配置状态');
             }
         }
-        \Artisan::call('config:cache');
+        Artisan::call('config:cache');
         return response([
             'data' => true
         ]);

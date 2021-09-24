@@ -2,9 +2,30 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\Serialize;
 
+/**
+ * App\Models\TicketMessage
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property int $ticket_id
+ * @property string $message
+ * @property int $created_at
+ * @property int $updated_at
+ * @method static Builder|TicketMessage newModelQuery()
+ * @method static Builder|TicketMessage newQuery()
+ * @method static Builder|TicketMessage query()
+ * @method static Builder|TicketMessage whereCreatedAt($value)
+ * @method static Builder|TicketMessage whereId($value)
+ * @method static Builder|TicketMessage whereMessage($value)
+ * @method static Builder|TicketMessage whereTicketId($value)
+ * @method static Builder|TicketMessage whereUpdatedAt($value)
+ * @method static Builder|TicketMessage whereUserId($value)
+ * @mixin \Eloquent
+ */
 class TicketMessage extends Model
 {
     use Serialize;

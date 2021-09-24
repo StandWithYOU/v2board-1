@@ -2,9 +2,36 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\Serialize;
 
+/**
+ * App\Models\Knowledge
+ *
+ * @property int $id
+ * @property string $language 語言
+ * @property string $category 分類名
+ * @property string $title 標題
+ * @property string $body 內容
+ * @property int|null $sort 排序
+ * @property int $show 顯示
+ * @property int $created_at 創建時間
+ * @property int $updated_at 更新時間
+ * @method static Builder|Knowledge newModelQuery()
+ * @method static Builder|Knowledge newQuery()
+ * @method static Builder|Knowledge query()
+ * @method static Builder|Knowledge whereBody($value)
+ * @method static Builder|Knowledge whereCategory($value)
+ * @method static Builder|Knowledge whereCreatedAt($value)
+ * @method static Builder|Knowledge whereId($value)
+ * @method static Builder|Knowledge whereLanguage($value)
+ * @method static Builder|Knowledge whereShow($value)
+ * @method static Builder|Knowledge whereSort($value)
+ * @method static Builder|Knowledge whereTitle($value)
+ * @method static Builder|Knowledge whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class Knowledge extends Model
 {
     use Serialize;

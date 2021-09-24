@@ -1,12 +1,58 @@
 <?php
 
+
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\Serialize;
 
 
+/**
+ * App\Models\Plan
+ *
+ * @property int $id
+ * @property int $group_id
+ * @property int $transfer_enable
+ * @property string $name
+ * @property int $show
+ * @property int|null $sort
+ * @property int $renew
+ * @property string|null $content
+ * @property int|null $month_price
+ * @property int|null $quarter_price
+ * @property int|null $half_year_price
+ * @property int|null $year_price
+ * @property int|null $two_year_price
+ * @property int|null $three_year_price
+ * @property int|null $onetime_price
+ * @property int|null $reset_price
+ * @property int $created_at
+ * @property int $updated_at
+ * @method static Builder|Plan newModelQuery()
+ * @method static Builder|Plan newQuery()
+ * @method static Builder|Plan query()
+ * @method static Builder|Plan whereContent($value)
+ * @method static Builder|Plan whereCreatedAt($value)
+ * @method static Builder|Plan whereGroupId($value)
+ * @method static Builder|Plan whereHalfYearPrice($value)
+ * @method static Builder|Plan whereId($value)
+ * @method static Builder|Plan whereMonthPrice($value)
+ * @method static Builder|Plan whereName($value)
+ * @method static Builder|Plan whereOnetimePrice($value)
+ * @method static Builder|Plan whereQuarterPrice($value)
+ * @method static Builder|Plan whereRenew($value)
+ * @method static Builder|Plan whereResetPrice($value)
+ * @method static Builder|Plan whereShow($value)
+ * @method static Builder|Plan whereSort($value)
+ * @method static Builder|Plan whereThreeYearPrice($value)
+ * @method static Builder|Plan whereTransferEnable($value)
+ * @method static Builder|Plan whereTwoYearPrice($value)
+ * @method static Builder|Plan whereUpdatedAt($value)
+ * @method static Builder|Plan whereYearPrice($value)
+ * @mixin \Eloquent
+ */
 class Plan extends Model
 {
     use Serialize;
@@ -88,7 +134,7 @@ class Plan extends Model
     /**
      * get show plans
      *
-     * @return mixed
+     * @return Builder[]|Collection|\Illuminate\Database\Query\Builder[]|\Illuminate\Support\Collection|Plan[]
      */
     public static function getShowPlans()
     {

@@ -1,10 +1,31 @@
 <?php
 
+
+
+
 namespace App\Models;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 
+/**
+ * App\Models\ServerGroup
+ *
+ * @property int $id
+ * @property string $name
+ * @property int $created_at
+ * @property int $updated_at
+ * @method static Builder|ServerGroup newModelQuery()
+ * @method static Builder|ServerGroup newQuery()
+ * @method static Builder|ServerGroup query()
+ * @method static Builder|ServerGroup whereCreatedAt($value)
+ * @method static Builder|ServerGroup whereId($value)
+ * @method static Builder|ServerGroup whereName($value)
+ * @method static Builder|ServerGroup whereUpdatedAt($value)
+ * @mixin Eloquent
+ */
 class ServerGroup extends Model
 {
     const FIELD_ID = "id";

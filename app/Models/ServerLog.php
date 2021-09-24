@@ -2,11 +2,40 @@
 
 namespace App\Models;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 use App\Models\Traits\Serialize;
 
 
+/**
+ * App\Models\ServerLog
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property int $server_id
+ * @property string $u
+ * @property string $d
+ * @property string $rate
+ * @property string $method
+ * @property int $log_at
+ * @property int $created_at
+ * @property int $updated_at
+ * @method static Builder|ServerLog newModelQuery()
+ * @method static Builder|ServerLog newQuery()
+ * @method static Builder|ServerLog query()
+ * @method static Builder|ServerLog whereCreatedAt($value)
+ * @method static Builder|ServerLog whereD($value)
+ * @method static Builder|ServerLog whereId($value)
+ * @method static Builder|ServerLog whereLogAt($value)
+ * @method static Builder|ServerLog whereMethod($value)
+ * @method static Builder|ServerLog whereRate($value)
+ * @method static Builder|ServerLog whereServerId($value)
+ * @method static Builder|ServerLog whereU($value)
+ * @method static Builder|ServerLog whereUpdatedAt($value)
+ * @method static Builder|ServerLog whereUserId($value)
+ * @mixin Eloquent
+ */
 class ServerLog extends Model
 {
     use Serialize;

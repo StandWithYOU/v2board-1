@@ -2,9 +2,32 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\Serialize;
 
+/**
+ * App\Models\MailLog
+ *
+ * @property int $id
+ * @property string $email
+ * @property string $subject
+ * @property string $template_name
+ * @property string|null $error
+ * @property int $created_at
+ * @property int $updated_at
+ * @method static Builder|MailLog newModelQuery()
+ * @method static Builder|MailLog newQuery()
+ * @method static Builder|MailLog query()
+ * @method static Builder|MailLog whereCreatedAt($value)
+ * @method static Builder|MailLog whereEmail($value)
+ * @method static Builder|MailLog whereError($value)
+ * @method static Builder|MailLog whereId($value)
+ * @method static Builder|MailLog whereSubject($value)
+ * @method static Builder|MailLog whereTemplateName($value)
+ * @method static Builder|MailLog whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class MailLog extends Model
 {
     use Serialize;

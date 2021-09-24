@@ -2,9 +2,30 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\Serialize;
 
+/**
+ * App\Models\Notice
+ *
+ * @property int $id
+ * @property string $title
+ * @property string $content
+ * @property string|null $img_url
+ * @property int $created_at
+ * @property int $updated_at
+ * @method static Builder|Notice newModelQuery()
+ * @method static Builder|Notice newQuery()
+ * @method static Builder|Notice query()
+ * @method static Builder|Notice whereContent($value)
+ * @method static Builder|Notice whereCreatedAt($value)
+ * @method static Builder|Notice whereId($value)
+ * @method static Builder|Notice whereImgUrl($value)
+ * @method static Builder|Notice whereTitle($value)
+ * @method static Builder|Notice whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class Notice extends Model
 {
     use Serialize;

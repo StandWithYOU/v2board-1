@@ -74,7 +74,8 @@ class AdminRoute
             $router->post('/user/generate', 'Admin\\UserController@generate');
             $router->post('/user/dumpCSV', 'Admin\\UserController@dumpCSV');
             $router->post('/user/sendMail', 'Admin\\UserController@sendMail');
-            $router->post('/user/ban', 'Admin\\UserController@ban');
+            $router->post('/user/drop', 'Admin\\UserController@drop');
+            $router->post('/user/batchBan', 'Admin\\UserController@batchBan');
             $router->post('/user/resetSecret', 'Admin\\UserController@resetSecret');
             $router->post('/user/setInviteUser', 'Admin\\UserController@setInviteUser');
             // StatOrder

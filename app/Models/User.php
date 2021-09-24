@@ -2,10 +2,85 @@
 
 namespace App\Models;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Traits\Serialize;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 
+/**
+ * App\Models\User
+ *
+ * @property int $id
+ * @property int|null $invite_user_id
+ * @property int|null $telegram_id
+ * @property string $email
+ * @property string $password
+ * @property string|null $password_algo
+ * @property string|null $password_salt
+ * @property int|null $balance
+ * @property int $commission_type 0: system 1: cycle 2: onetime
+ * @property int|null $discount
+ * @property int|null $commission_rate
+ * @property int|null $commission_balance
+ * @property int|null $t
+ * @property int|null $u
+ * @property int|null $d
+ * @property int $transfer_enable
+ * @property int $banned
+ * @property int|null $is_admin
+ * @property int|null $last_login_at
+ * @property int|null $is_staff
+ * @property int|null $last_login_ip
+ * @property string $uuid
+ * @property int|null $group_id
+ * @property int|null $plan_id
+ * @property int|null $remind_expire
+ * @property int|null $remind_traffic
+ * @property string $token
+ * @property int|null $expired_at
+ * @property string|null $remarks
+ * @property int $created_at
+ * @property int $updated_at
+ * @method static Builder|User newModelQuery()
+ * @method static Builder|User newQuery()
+ * @method static Builder|User query()
+ * @method static Builder|User whereBalance($value)
+ * @method static Builder|User whereBanned($value)
+ * @method static Builder|User whereCommissionBalance($value)
+ * @method static Builder|User whereCommissionRate($value)
+ * @method static Builder|User whereCommissionType($value)
+ * @method static Builder|User whereCreatedAt($value)
+ * @method static Builder|User whereD($value)
+ * @method static Builder|User whereDiscount($value)
+ * @method static Builder|User whereEmail($value)
+ * @method static Builder|User whereExpiredAt($value)
+ * @method static Builder|User whereGroupId($value)
+ * @method static Builder|User whereId($value)
+ * @method static Builder|User whereInviteUserId($value)
+ * @method static Builder|User whereIsAdmin($value)
+ * @method static Builder|User whereIsStaff($value)
+ * @method static Builder|User whereLastLoginAt($value)
+ * @method static Builder|User whereLastLoginIp($value)
+ * @method static Builder|User wherePassword($value)
+ * @method static Builder|User wherePasswordAlgo($value)
+ * @method static Builder|User wherePasswordSalt($value)
+ * @method static Builder|User wherePlanId($value)
+ * @method static Builder|User whereRemarks($value)
+ * @method static Builder|User whereRemindExpire($value)
+ * @method static Builder|User whereRemindTraffic($value)
+ * @method static Builder|User whereT($value)
+ * @method static Builder|User whereTelegramId($value)
+ * @method static Builder|User whereToken($value)
+ * @method static Builder|User whereTransferEnable($value)
+ * @method static Builder|User whereU($value)
+ * @method static Builder|User whereUpdatedAt($value)
+ * @method static Builder|User whereUuid($value)
+ * @mixin Eloquent
+ */
 class User extends Model
 {
     use Serialize;
@@ -29,7 +104,6 @@ class User extends Model
     const FIELD_IS_ADMIN = "is_admin";
     const FIELD_IS_STAFF = "is_staff";
     const FIELD_LAST_LOGIN_AT = "last_login_at";
-    const FIELD_LAST_LOGIN_IP = "last_login_ip";
     const FIELD_UUID = "uuid";
     const FIELD_GROUP_ID = "group_id";
     const FIELD_PLAN_ID = "plan_id";
@@ -41,7 +115,6 @@ class User extends Model
     const FIELD_CREATED_AT = "created_at";
     const FIELD_UPDATED_AT = "updated_at";
 
-    const BANNED_ON = 1;
     const BANNED_OFF = 0;
 
     const COMMISSION_TYPE_SYSTEM = 0;
@@ -64,20 +137,73 @@ class User extends Model
      */
     public function plan()
     {
-        return $this->belongsTo("App\Models\Plan")->first();
+        return $this->belongsTo('App\Models\Plan')->first();
+    }
+
+
+    /**
+     * get orders
+     *
+     * @return HasMany
+     */
+    public function orders(): HasMany
+    {
+        return  $this->hasMany('App\Models\Order', Order::FIELD_USER_ID);
+    }
+
+
+    /**
+     * get tickets
+     *
+     * @return HasMany
+     */
+    public function tickets(): HasMany
+    {
+        return $this->hasMany('App\Models\Ticket', Ticket::FIELD_USER_ID);
+    }
+
+    /**
+     * get ticket messages
+     *
+     * @return HasMany
+     */
+    public function ticketMessages(): HasMany
+    {
+        return $this->hasMany('App\Models\TicketMessage', Ticket::FIELD_USER_ID);
+    }
+
+    /**
+     * get invite codes
+     *
+     * @return HasMany
+     */
+    public function inviteCodes(): HasMany
+    {
+        return $this->hasMany('App\Models\InviteCode', InviteCode::FIELD_USER_ID);
+    }
+
+    /**
+     * get server logs
+     *
+     * @return HasMany
+     */
+    public function serverLogs(): HasMany
+    {
+        return $this->hasMany('App\Models\ServerLog', ServerLog::FIELD_USER_ID);
     }
 
 
     /**
      * get unused invite codes
      *
-     * @return mixed
+     * @return Builder[]|Collection|InviteCode[]
      */
     public function getUnusedInviteCodes()
     {
         return InviteCode::where(InviteCode::FIELD_USER_ID, $this->getKey())->
         where(InviteCode::FIELD_STATUS, InviteCode::STATUS_UNUSED)->get();
     }
+
 
 
     /**
@@ -161,6 +287,16 @@ class User extends Model
     }
 
     /**
+     * count invite users
+     *
+     * @return int
+     */
+    public function countInviteUsers(): int
+    {
+        return User::whereInviteUserId($this->getKey())->count();
+    }
+
+    /**
      * check admin
      *
      * @return bool
@@ -203,7 +339,7 @@ class User extends Model
      *
      * @param int $orderStatus
      *
-     * @return mixed
+     * @return Collection|Builder[]|\Illuminate\Database\Query\Builder[]|\Illuminate\Support\Collection|Order[]
      */
     public function getInvitedOrderDetails(int $orderStatus)
     {
@@ -357,9 +493,33 @@ class User extends Model
 
 
     /**
+     * drop
+     *
+     *
+     * @return bool
+     * @throws \Throwable
+     */
+    public function drop(): bool
+    {
+        Db::beginTransaction();
+        try {
+            $this->orders()->delete();
+            $this->tickets()->delete();
+            $this->inviteCodes()->delete();
+            $this->ticketMessages()->delete();
+            $this->serverLogs()->delete();
+            $this->delete();
+        } catch (\Exception $e) {
+            DB::rollBack();
+        }
+        Db::commit();
+        return true;
+    }
+
+    /**
      * find completed not reset price Type Orders
      *
-     * @return mixed
+     * @return Collection|Builder[]|Order[]
      */
     public function findCompletedNotResetPriceTypeOrders()
     {
@@ -374,7 +534,7 @@ class User extends Model
      * @param bool $includeStaff
      * @param bool $withTelegram
      *
-     * @return mixed
+     * @return Collection|Builder[]|User[]
      */
     public static function findAdminUsers(bool $includeStaff = true, bool $withTelegram = true)
     {
@@ -395,9 +555,9 @@ class User extends Model
     /**
      * count Month Register
      *
-     * @return mixed
+     * @return int
      */
-    public static function countMonthRegister()
+    public static function countMonthRegister(): int
     {
         return User::where(self::FIELD_CREATED_AT, '>=', strtotime(date('Y-m-1')))
             ->where(self::FIELD_CREATED_AT, '<', time())->count();
@@ -407,9 +567,9 @@ class User extends Model
      * count effective plan users
      *
      * @param $planId
-     * @return mixed
+     * @return int
      */
-    public static function countEffectivePlanUsers($planId)
+    public static function countEffectivePlanUsers($planId): int
     {
         return self::where(self::FIELD_PLAN_ID, $planId)->where(self::FIELD_EXPIRED_AT, '>=', time())->count();
     }
@@ -418,7 +578,7 @@ class User extends Model
      * find user by email
      *
      * @param string $email
-     * @return mixed
+     * @return Builder|Model|object|User|null
      */
     public static function findByEmail(string $email)
     {
@@ -429,7 +589,7 @@ class User extends Model
      * find user by token
      *
      * @param string $token
-     * @return mixed
+     * @return Builder|Model|object|User|null
      */
     public static function findByToken(string $token)
     {
@@ -441,7 +601,7 @@ class User extends Model
      * find user by telegram id
      *
      * @param int $telegramId
-     * @return mixed
+     * @return Builder|Model|object|User|null
      */
     public static function findByTelegramId(int $telegramId)
     {

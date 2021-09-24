@@ -3,11 +3,52 @@
 namespace App\Models;
 
 use App\Utils\CacheKey;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Traits\Serialize;
 
 
+/**
+ * App\Models\ServerTrojan
+ *
+ * @property int $id 节点ID
+ * @property array $group_id 节点组
+ * @property int|null $parent_id 父节点
+ * @property array|null $tags 节点标签
+ * @property string $name 节点名称
+ * @property string $rate 倍率
+ * @property string $host 主机名
+ * @property int $port 连接端口
+ * @property int $server_port 服务端口
+ * @property int $allow_insecure 是否允许不安全
+ * @property string|null $server_name
+ * @property int $show 是否显示
+ * @property int|null $sort
+ * @property int $created_at
+ * @property int $updated_at
+ * @method static Builder|ServerTrojan newModelQuery()
+ * @method static Builder|ServerTrojan newQuery()
+ * @method static Builder|ServerTrojan query()
+ * @method static Builder|ServerTrojan whereAllowInsecure($value)
+ * @method static Builder|ServerTrojan whereCreatedAt($value)
+ * @method static Builder|ServerTrojan whereGroupId($value)
+ * @method static Builder|ServerTrojan whereHost($value)
+ * @method static Builder|ServerTrojan whereId($value)
+ * @method static Builder|ServerTrojan whereName($value)
+ * @method static Builder|ServerTrojan whereParentId($value)
+ * @method static Builder|ServerTrojan wherePort($value)
+ * @method static Builder|ServerTrojan whereRate($value)
+ * @method static Builder|ServerTrojan whereServerName($value)
+ * @method static Builder|ServerTrojan whereServerPort($value)
+ * @method static Builder|ServerTrojan whereShow($value)
+ * @method static Builder|ServerTrojan whereSort($value)
+ * @method static Builder|ServerTrojan whereTags($value)
+ * @method static Builder|ServerTrojan whereUpdatedAt($value)
+ * @mixin Eloquent
+ */
 class ServerTrojan extends Model
 {
     use Serialize;
@@ -51,7 +92,7 @@ class ServerTrojan extends Model
      *
      * @return bool
      */
-    public function isShow()
+    public function isShow(): bool
     {
         return (bool)$this->getAttribute(self::FIELD_SHOW);
     }
@@ -59,7 +100,7 @@ class ServerTrojan extends Model
     /**
      * find available users
      *
-     * @return mixed
+     * @return array|Collection
      */
     public function findAvailableUsers()
     {
@@ -70,9 +111,9 @@ class ServerTrojan extends Model
 
     /**
      * nodes
-     * @return mixed
+     * @return Collection
      */
-    public static function nodes()
+    public static function nodes(): Collection
     {
         $servers = self::orderBy('sort', "ASC")->get();
         foreach ($servers as $server) {
@@ -107,9 +148,9 @@ class ServerTrojan extends Model
      *
      * @param User $user
      * @param bool $show
-     * @return mixed
+     * @return Collection
      */
-    public static function configs(User $user, bool $show = true)
+    public static function configs(User $user, bool $show = true): Collection
     {
         $servers = self::orderBy(self::FIELD_SORT, "ASC")->where(self::FIELD_SHOW, (int)$show)->get();
         foreach ($servers as $key => $server) {

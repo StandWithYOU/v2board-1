@@ -3,9 +3,42 @@
 namespace App\Models;
 
 use App\Models\Traits\Serialize;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Exceptions\CouponException;
 
+/**
+ * App\Models\Coupon
+ *
+ * @property int $id
+ * @property string $code
+ * @property string $name
+ * @property int $type
+ * @property int $value
+ * @property int|null $limit_use
+ * @property int|null $limit_use_with_user
+ * @property array|null $limit_plan_ids
+ * @property int $started_at
+ * @property int $ended_at
+ * @property int $created_at
+ * @property int $updated_at
+ * @method static Builder|Coupon newModelQuery()
+ * @method static Builder|Coupon newQuery()
+ * @method static Builder|Coupon query()
+ * @method static Builder|Coupon whereCode($value)
+ * @method static Builder|Coupon whereCreatedAt($value)
+ * @method static Builder|Coupon whereEndedAt($value)
+ * @method static Builder|Coupon whereId($value)
+ * @method static Builder|Coupon whereLimitPlanIds($value)
+ * @method static Builder|Coupon whereLimitUse($value)
+ * @method static Builder|Coupon whereLimitUseWithUser($value)
+ * @method static Builder|Coupon whereName($value)
+ * @method static Builder|Coupon whereStartedAt($value)
+ * @method static Builder|Coupon whereType($value)
+ * @method static Builder|Coupon whereUpdatedAt($value)
+ * @method static Builder|Coupon whereValue($value)
+ * @mixin \Eloquent
+ */
 class Coupon extends Model
 {
     use Serialize;
@@ -48,6 +81,7 @@ class Coupon extends Model
      * checkCode
      *
      * am string $code
+     * @param string $code
      * @param int $planId
      * @param int $userId
      * @return Coupon
@@ -102,7 +136,7 @@ class Coupon extends Model
      * find coupon by code
      *
      * @param string $code
-     * @return mixed
+     * @return Builder|Coupon|Model|object|null
      */
     public static function findByCode(string $code)
     {

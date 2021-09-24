@@ -3,16 +3,67 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use App\Models\Traits\Serialize;
 use App\Models\Exceptions\OrderException;
 use App\Models\Exceptions\CouponException;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 /**
+ * App\Models\Order
+ *
  * @property mixed created_at
+ * @property int $id
+ * @property int|null $invite_user_id
+ * @property int $user_id
+ * @property int $plan_id
+ * @property int|null $coupon_id 0
+ * @property int|null $payment_id
+ * @property int $type 1新购2续费3升级
+ * @property string $cycle
+ * @property string $trade_no
+ * @property string|null $callback_no
+ * @property int $total_amount
+ * @property int|null $discount_amount
+ * @property int|null $surplus_amount 剩余价值
+ * @property int|null $refund_amount 退款金额
+ * @property int|null $balance_amount 使用余额
+ * @property array|null $surplus_order_ids 折抵订单
+ * @property int $status 0待支付1开通中2已取消3已完成4已折抵
+ * @property int $commission_status 0待确认1发放中2有效3无效
+ * @property int $commission_balance
+ * @property int|null $paid_at
+ * @property int $updated_at
+ * @method static Builder|Order newModelQuery()
+ * @method static Builder|Order newQuery()
+ * @method static Builder|Order query()
+ * @method static Builder|Order whereBalanceAmount($value)
+ * @method static Builder|Order whereCallbackNo($value)
+ * @method static Builder|Order whereCommissionBalance($value)
+ * @method static Builder|Order whereCommissionStatus($value)
+ * @method static Builder|Order whereCouponId($value)
+ * @method static Builder|Order whereCreatedAt($value)
+ * @method static Builder|Order whereCycle($value)
+ * @method static Builder|Order whereDiscountAmount($value)
+ * @method static Builder|Order whereId($value)
+ * @method static Builder|Order whereInviteUserId($value)
+ * @method static Builder|Order wherePaidAt($value)
+ * @method static Builder|Order wherePaymentId($value)
+ * @method static Builder|Order wherePlanId($value)
+ * @method static Builder|Order whereRefundAmount($value)
+ * @method static Builder|Order whereStatus($value)
+ * @method static Builder|Order whereSurplusAmount($value)
+ * @method static Builder|Order whereSurplusOrderIds($value)
+ * @method static Builder|Order whereTotalAmount($value)
+ * @method static Builder|Order whereTradeNo($value)
+ * @method static Builder|Order whereType($value)
+ * @method static Builder|Order whereUpdatedAt($value)
+ * @method static Builder|Order whereUserId($value)
+ * @mixin \Eloquent
  */
 class Order extends Model
 {
@@ -174,7 +225,7 @@ class Order extends Model
 
         if ($cycle === self::CYCLE_RESET_PRICE) {
             $type = self::TYPE_RESET_PRICE;
-        } else if ($userPlanId !== 0 && $planId !== $userPlanId && ($userExpiredAt > time() || $userExpiredAt === 0)) {
+        } else if ($planId !== 0 && $planId !== $userPlanId && ($userExpiredAt > time() || $userExpiredAt === 0)) {
             $type = self::TYPE_UPGRADE;
         } else if ($userExpiredAt > time() && $planId == $userPlanId) { // 用户订阅未过期且购买订阅与当前订阅相同 === 续费
             $type = self::TYPE_RENEW;
@@ -407,9 +458,9 @@ class Order extends Model
     /**
      * stat commission pending
      *
-     * @return mixed
+     * @return int
      */
-    public static function countCommissionPending()
+    public static function countCommissionPending(): int
     {
         return self::where(self::FIELD_COMMISSION_STATUS, self::COMMISSION_STATUS_NEW)
             ->where(self::FIELD_INVITE_USER_ID, '!=', 0)
@@ -422,7 +473,7 @@ class Order extends Model
      * find order by tradeNo
      *
      * @param string $tradeNo
-     * @return mixed
+     * @return Builder|Model|object|Order|null
      */
     public static function findByTradeNo(string $tradeNo)
     {
@@ -463,6 +514,7 @@ class Order extends Model
 
     /**
      * @throws OrderException
+     * @throws Throwable
      */
     public function cancel(): bool
     {
@@ -497,6 +549,7 @@ class Order extends Model
 
     /**
      * @throws OrderException
+     * @throws Throwable
      */
     public function open() : bool
     {
@@ -526,7 +579,7 @@ class Order extends Model
                 Order::whereIn(Order::FIELD_ID, $surplusOrderIds)->update([
                     Order::FIELD_STATUS => Order::STATUS_DISCOUNTED
                 ]);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 DB::rollback();
                 throw new OrderException($e->getMessage(), 5);
             }
