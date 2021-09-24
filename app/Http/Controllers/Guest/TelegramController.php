@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Utils\Helper;
 use Illuminate\Support\Facades\DB;
 use StdClass;
+use Throwable;
 
 class TelegramController extends Controller
 {
@@ -66,11 +67,20 @@ class TelegramController extends Controller
             case '/unbind':
                 $this->_unbind();
                 break;
+            case '/checkin':
+                $this->_checkin();
+                break;
+            case '/lucky':
+                $this->_lucky();
+                break;
             default:
                 $this->_help();
         }
     }
 
+    /**
+     * @throws Throwable
+     */
     private function _fromReply()
     {
         // ticket
@@ -102,6 +112,74 @@ class TelegramController extends Controller
         }
         return $obj;
     }
+
+    private function _checkin()
+    {
+        $msg = $this->msg;
+        if (!$msg->is_private){
+            return;
+        }
+        /**
+         * @var User $user
+         */
+        $user = User::where(User::FIELD_TELEGRAM_ID, $msg->chat_id)->first();
+        if ($user === null) {
+            $this->_help();
+            $this->_service->sendMessage($msg->chat_id, '没有查询到您的用户信息，请先绑定账号', 'markdown');
+            return;
+        }
+
+        $lastCheckInAt = $user->getAttribute(User::FIELD_LAST_CHECKIN_AT) ;
+        $last = date('Ymd', $lastCheckInAt);
+        $today = date('Ymd');
+        if ($last != $today ) {
+            //吱吱提醒
+            //下面括号内填写签到的奖励范围，单位MB，例如填写 (1,1024);表示随机奖励1-1024MB
+            $randomTraffic = random_int(1,1024);
+            $giftTraffic = $randomTraffic * 1024 * 1024;
+            $user->increment(User::FIELD_TRANSFER_ENABLE, $giftTraffic);
+            $gift = Helper::trafficConvert($giftTraffic);
+            $user->setAttribute(User::FIELD_LAST_CHECKIN_AT,  time());
+            $user->save();
+            $text = "✏️恭喜您签到成功\n获得奖励：`$gift`";
+        }else{
+            $text = "您今天已经签过到了～";
+        }
+        $this->_service->sendMessage($msg->chat_id, $text, 'markdown');
+    }
+
+
+    private function _lucky()
+    {
+        $msg = $this->msg;
+        if (!$msg->is_private) {
+            return;
+        }
+
+        /**
+         * @var User $user
+         */
+        $user = User::where(User::FIELD_TELEGRAM_ID, $msg->chat_id)->first();
+        if ($user === null) {
+            $this->_help();
+            $this->_service->sendMessage($msg->chat_id, '没有查询到您的用户信息，请先绑定账号', 'markdown');
+            return;
+        }
+        //吱吱提醒
+        //下面括号内填写签到的奖励范围，单位MB，例如填写 (-1024,1024);表示随机奖励-1024到1024MB
+        $randomTraffic = random_int(-1024,1024);
+        $giftTraffic = $randomTraffic * 1024 * 1024;
+        $user->increment(User::FIELD_TRANSFER_ENABLE, $giftTraffic);
+        $gift = Helper::trafficConvert($giftTraffic);
+        $user->save();
+        if ($giftTraffic > 0) {
+            $text = "恭喜您获得奖励：`$gift`";
+        } else {
+            $text = "哎，有点惨，损失：`$gift`";
+        }
+        $this->_service->sendMessage($msg->chat_id, $text, 'markdown');
+    }
+
 
     private function _bind()
     {
@@ -170,7 +248,9 @@ class TelegramController extends Controller
             '/bind 订阅地址 - 绑定你的' . config('v2board.app_name', 'V2Board') . '账号',
             '/traffic - 查询流量信息',
             '/getlatesturl - 获取最新的' . config('v2board.app_name', 'V2Board') . '网址',
-            '/unbind - 解除绑定'
+            '/unbind - 解除绑定',
+            '/checkin - 每日签到(可以获得流量)',
+            '/lucky - 抽奖(谨慎，有可能损失流量)',
         ];
         $text = implode(PHP_EOL, $commands);
         $this->_service->sendMessage($msg->chat_id, "你可以使用以下命令进行操作：\n\n$text", 'markdown');
@@ -197,7 +277,6 @@ class TelegramController extends Controller
         $remaining = Helper::trafficConvert($user->getAttribute(User::FIELD_TRANSFER_ENABLE) - ($user->getAttribute(User::FIELD_U) + $user->getAttribute(User::FIELD_D)));
         $text = "🚥流量查询\n———————————————\n计划流量：`$transferEnable`\n已用上行：`$up`\n已用下行：`$down`\n剩余流量：`$remaining`";
         $this->_service->sendMessage($msg->chat_id, $text, 'markdown');
-
     }
 
     private function _getLatestUrl()
@@ -211,6 +290,9 @@ class TelegramController extends Controller
         $this->_service->sendMessage($msg->chat_id, $text, 'markdown');
     }
 
+    /**
+     * @throws Throwable
+     */
     private function _replayTicket($ticketId)
     {
         $msg = $this->msg;
@@ -256,7 +338,7 @@ class TelegramController extends Controller
         }
 
         $this->_service->sendMessage($msg->chat_id, "#`$ticketId` 的工单已回复成功", 'markdown');
-        TelegramService::sendMessageWithAdmin("#`{$ticketId}` 的工单已由 {$user->email} 进行回复", true);
+        TelegramService::sendMessageWithAdmin("#`$ticketId` 的工单已由 $user->email 进行回复", true);
     }
 
 }

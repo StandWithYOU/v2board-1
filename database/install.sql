@@ -11,7 +11,7 @@
  Target Server Version : 80016
  File Encoding         : utf-8
 
- Date: 09/18/2021 07:01:50 AM
+ Date: 09/25/2021 03:30:12 AM
 */
 
 SET NAMES utf8mb4;
@@ -84,7 +84,7 @@ CREATE TABLE `v2_knowledge` (
                                 `updated_at` int(11) NOT NULL COMMENT '更新時間',
                                 PRIMARY KEY (`id`),
                                 KEY `language_show` (`language`,`show`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='知識庫';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='知識庫';
 
 -- ----------------------------
 --  Table structure for `v2_mail_log`
@@ -99,7 +99,7 @@ CREATE TABLE `v2_mail_log` (
                                `created_at` int(11) NOT NULL,
                                `updated_at` int(11) NOT NULL,
                                PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=328 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `v2_notice`
@@ -305,7 +305,7 @@ CREATE TABLE `v2_server_log` (
                                  KEY `user_id_creatd_at` (`user_id`,`created_at`) USING BTREE,
                                  KEY `user_id` (`user_id`),
                                  KEY `server_id` (`server_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1008 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1009 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `v2_server_shadowsocks`
@@ -329,7 +329,7 @@ CREATE TABLE `v2_server_shadowsocks` (
                                          PRIMARY KEY (`id`),
                                          KEY `show` (`show`) USING BTREE,
                                          KEY `parent_id` (`parent_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 --  Table structure for `v2_server_stat`
@@ -374,7 +374,7 @@ CREATE TABLE `v2_server_trojan` (
                                     PRIMARY KEY (`id`),
                                     KEY `show` (`show`) USING BTREE,
                                     KEY `parent_id` (`parent_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='trojan伺服器表';
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='trojan伺服器表';
 
 -- ----------------------------
 --  Table structure for `v2_ticket`
@@ -392,7 +392,7 @@ CREATE TABLE `v2_ticket` (
                              PRIMARY KEY (`id`),
                              KEY `status` (`status`) USING BTREE,
                              KEY `user_id_creatd_at` (`user_id`,`created_at`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=265 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=266 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `v2_ticket_message`
@@ -408,7 +408,7 @@ CREATE TABLE `v2_ticket_message` (
                                      PRIMARY KEY (`id`),
                                      KEY `user_id` (`user_id`) USING BTREE,
                                      KEY `ticket_id` (`ticket_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `v2_tutorial`
@@ -447,6 +447,7 @@ CREATE TABLE `v2_user` (
                            `u` bigint(20) DEFAULT '0',
                            `d` bigint(20) DEFAULT '0',
                            `transfer_enable` bigint(20) NOT NULL DEFAULT '0',
+                           `last_checkin_at` int(11) NOT NULL DEFAULT '0',
                            `banned` tinyint(1) NOT NULL DEFAULT '0',
                            `is_admin` tinyint(1) DEFAULT '0',
                            `last_login_at` int(11) DEFAULT NULL,
@@ -470,6 +471,6 @@ CREATE TABLE `v2_user` (
                            KEY `token` (`token`) USING BTREE,
                            KEY `password_email` (`password`,`email`) USING BTREE,
                            KEY `telegram_id` (`telegram_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=utf8;
 
 SET FOREIGN_KEY_CHECKS = 1;

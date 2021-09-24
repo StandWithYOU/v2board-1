@@ -27,3 +27,6 @@ ALTER TABLE `v2_coupon`
 ALTER TABLE `v2_user`
     ADD `password_salt` char(10) COLLATE 'utf8_general_ci' NULL AFTER `password_algo`;
 
+ALTER TABLE `v2_user`
+    ADD `last_checkin_at` int(11) NOT NULL DEFAULT '0' AFTER `transfer_enable`
+

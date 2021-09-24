@@ -104,6 +104,7 @@ class User extends Model
     const FIELD_IS_ADMIN = "is_admin";
     const FIELD_IS_STAFF = "is_staff";
     const FIELD_LAST_LOGIN_AT = "last_login_at";
+    const FIELD_LAST_CHECKIN_AT = "last_checkin_at";
     const FIELD_UUID = "uuid";
     const FIELD_GROUP_ID = "group_id";
     const FIELD_PLAN_ID = "plan_id";
