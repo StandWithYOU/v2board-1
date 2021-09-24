@@ -29,7 +29,7 @@ CREATE TABLE `failed_jobs` (
                                `exception` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
                                `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
                                PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 --  Table structure for `v2_coupon`
@@ -50,7 +50,7 @@ CREATE TABLE `v2_coupon` (
                              `updated_at` int(11) NOT NULL,
                              PRIMARY KEY (`id`),
                              KEY `code` (`code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=162 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `v2_invite_code`
@@ -66,7 +66,7 @@ CREATE TABLE `v2_invite_code` (
                                   `updated_at` int(11) NOT NULL,
                                   PRIMARY KEY (`id`),
                                   KEY `user_id_status` (`user_id`,`status`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `v2_knowledge`
@@ -84,7 +84,7 @@ CREATE TABLE `v2_knowledge` (
                                 `updated_at` int(11) NOT NULL COMMENT '更新時間',
                                 PRIMARY KEY (`id`),
                                 KEY `language_show` (`language`,`show`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='知識庫';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='知識庫';
 
 -- ----------------------------
 --  Table structure for `v2_mail_log`
@@ -99,7 +99,7 @@ CREATE TABLE `v2_mail_log` (
                                `created_at` int(11) NOT NULL,
                                `updated_at` int(11) NOT NULL,
                                PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=328 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `v2_notice`
@@ -113,7 +113,7 @@ CREATE TABLE `v2_notice` (
                              `created_at` int(11) NOT NULL,
                              `updated_at` int(11) NOT NULL,
                              PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `v2_order`
@@ -150,7 +150,7 @@ CREATE TABLE `v2_order` (
                             KEY `status_user_id` (`user_id`,`status`) USING BTREE,
                             KEY `created_at_status` (`status`,`created_at`) USING BTREE,
                             KEY `trade_no` (`trade_no`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `v2_order_stat`
@@ -170,7 +170,7 @@ CREATE TABLE `v2_order_stat` (
                                  UNIQUE KEY `record_at` (`record_at`) USING BTREE,
                                  KEY `record_at_record_type` (`record_type`,`record_at`) USING BTREE,
                                  KEY `record_type` (`record_type`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='订单统计';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='订单统计';
 
 -- ----------------------------
 --  Table structure for `v2_payment`
@@ -188,7 +188,7 @@ CREATE TABLE `v2_payment` (
                               `updated_at` int(11) NOT NULL,
                               PRIMARY KEY (`id`),
                               KEY `uuid` (`uuid`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 --  Table structure for `v2_plan`
@@ -214,7 +214,7 @@ CREATE TABLE `v2_plan` (
                            `created_at` int(11) NOT NULL,
                            `updated_at` int(11) NOT NULL,
                            PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `v2_plan_empty`
@@ -270,7 +270,7 @@ CREATE TABLE `v2_server` (
                              PRIMARY KEY (`id`),
                              KEY `show` (`show`) USING BTREE,
                              KEY `parent_id` (`parent_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `v2_server_group`
@@ -305,7 +305,7 @@ CREATE TABLE `v2_server_log` (
                                  KEY `user_id_creatd_at` (`user_id`,`created_at`) USING BTREE,
                                  KEY `user_id` (`user_id`),
                                  KEY `server_id` (`server_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1009 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `v2_server_shadowsocks`
@@ -329,7 +329,7 @@ CREATE TABLE `v2_server_shadowsocks` (
                                          PRIMARY KEY (`id`),
                                          KEY `show` (`show`) USING BTREE,
                                          KEY `parent_id` (`parent_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 --  Table structure for `v2_server_stat`
@@ -349,7 +349,7 @@ CREATE TABLE `v2_server_stat` (
                                   UNIQUE KEY `server_id_server_type_record_at` (`server_id`,`server_type`,`record_at`),
                                   KEY `record_at` (`record_at`),
                                   KEY `server_id` (`server_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='节点数据统计';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='节点数据统计';
 
 -- ----------------------------
 --  Table structure for `v2_server_trojan`
@@ -374,7 +374,7 @@ CREATE TABLE `v2_server_trojan` (
                                     PRIMARY KEY (`id`),
                                     KEY `show` (`show`) USING BTREE,
                                     KEY `parent_id` (`parent_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='trojan伺服器表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='trojan伺服器表';
 
 -- ----------------------------
 --  Table structure for `v2_ticket`
@@ -392,7 +392,7 @@ CREATE TABLE `v2_ticket` (
                              PRIMARY KEY (`id`),
                              KEY `status` (`status`) USING BTREE,
                              KEY `user_id_creatd_at` (`user_id`,`created_at`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=266 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `v2_ticket_message`
@@ -408,7 +408,7 @@ CREATE TABLE `v2_ticket_message` (
                                      PRIMARY KEY (`id`),
                                      KEY `user_id` (`user_id`) USING BTREE,
                                      KEY `ticket_id` (`ticket_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `v2_tutorial`
@@ -471,6 +471,6 @@ CREATE TABLE `v2_user` (
                            KEY `token` (`token`) USING BTREE,
                            KEY `password_email` (`password`,`email`) USING BTREE,
                            KEY `telegram_id` (`telegram_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 SET FOREIGN_KEY_CHECKS = 1;
