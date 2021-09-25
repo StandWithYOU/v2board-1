@@ -218,25 +218,20 @@ class UserController extends Controller
             $user->setAttribute(User::FIELD_TRANSFER_ENABLE, $reqTransferEnable);
         }
 
-        if ($reqExpiredAt != null) {
-            $user->setAttribute(User::FIELD_EXPIRED_AT, $reqExpiredAt);
-        }
+        $user->setAttribute(User::FIELD_EXPIRED_AT, $reqExpiredAt);
+
 
         if ($reqBanned != null) {
             $user->setAttribute(User::FIELD_BANNED, $reqBanned);
         }
 
         if ($reqCommissionRate != null) {
-            $user->setAttribute(User::FIELD_COMMISSION_RATE, $reqCommissionRate);
-        }
-
-        if ($reqCommissionRate != null) {
             $user->setAttribute(User::FIELD_COMMISSION_TYPE, $reqCommissionType);
         }
 
-        if ($reqDiscount != null) {
-            $user->setAttribute(User::FIELD_DISCOUNT, $reqDiscount);
-        }
+        $user->setAttribute(User::FIELD_DISCOUNT, $reqDiscount);
+        $user->setAttribute(User::FIELD_COMMISSION_RATE, $reqCommissionRate);
+
 
         if ($reqIsAdmin != null) {
             $user->setAttribute(User::FIELD_IS_ADMIN, $reqIsAdmin);
@@ -262,9 +257,8 @@ class UserController extends Controller
             $user->setAttribute(User::FIELD_COMMISSION_BALANCE, $reqCommissionBalance);
         }
 
-        if ($reqRemarks != null) {
-            $user->setAttribute(User::FIELD_REMARKS, $reqRemarks);
-        }
+        $user->setAttribute(User::FIELD_REMARKS, $reqRemarks);
+
 
         // 保留Email但不使用
         if ($reqInviteUserEmail) {
@@ -567,7 +561,7 @@ class UserController extends Controller
         if ($user->isAdmin()) {
             abort(500, '该用户是管理员，暂不能删除');
         }
-        
+
         $user->drop();
         return response([
             'data' => true
