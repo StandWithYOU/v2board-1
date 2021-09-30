@@ -10,7 +10,20 @@
 [Demo](https://www.xflash.cc)
 
 ## Document
-[Document](https://docs.v2board.com) 
+
+### install 
+
+```
+git clone git@github.com:xflash-panda/v2board.git
+cd v2board
+chomod +x init.sh
+./init.sh
+```
+
+
+## Sponsors
+Thanks to the open source project license provided by [Jetbrains](https://www.jetbrains.com/)
+
 
 
 
