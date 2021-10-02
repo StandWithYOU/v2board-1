@@ -225,7 +225,7 @@ class Order extends Model
 
         if ($cycle === self::CYCLE_RESET_PRICE) {
             $type = self::TYPE_RESET_PRICE;
-        } else if ($planId !== 0 && $planId !== $userPlanId && ($userExpiredAt > time() || $userExpiredAt === 0)) {
+        } else if ($userPlanId !== 0 && $planId !== $userPlanId && ($userExpiredAt > time() || $userExpiredAt === 0)) {
             $type = self::TYPE_UPGRADE;
         } else if ($userExpiredAt > time() && $planId == $userPlanId) { // 用户订阅未过期且购买订阅与当前订阅相同 === 续费
             $type = self::TYPE_RENEW;
