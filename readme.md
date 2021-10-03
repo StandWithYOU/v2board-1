@@ -16,7 +16,7 @@
 ```
 git clone git@github.com:xflash-panda/v2board.git
 cd v2board
-chomod +x init.sh
+chmod +x init.sh
 ./init.sh
 ```
 
