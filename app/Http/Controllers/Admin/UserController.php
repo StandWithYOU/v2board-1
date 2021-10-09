@@ -360,10 +360,16 @@ class UserController extends Controller
         $reqExpiredAt = $request->input("expired_at");
         $reqEmailSuffix = $request->input('email_suffix');
         $reqPassword = $request->input('password');
+        $email = $reqEmailPrefix . '@' . $reqEmailSuffix;
 
         if (empty($reqEmailPrefix)) {
             abort(500, "参数错误");
         }
+
+        if (User::findByEmail($email)) {
+            abort(500, '邮箱已存在于系统中');
+        }
+
         $plan = null;
         if ($reqPlanId) {
             /**
@@ -376,7 +382,7 @@ class UserController extends Controller
         }
 
         $user = new User();
-        $user->setAttribute(User::FIELD_EMAIL, $reqEmailPrefix . '@' . $reqEmailSuffix);
+        $user->setAttribute(User::FIELD_EMAIL, $email);
         $user->setAttribute(User::FIELD_PLAN_ID, $plan !== null ? $plan->getKey() : 0);
         $user->setAttribute(User::FIELD_GROUP_ID, $plan !== null ? $plan->getAttribute(Plan::FIELD_GROUP_ID) : 0);
         $user->setAttribute(User::FIELD_TRANSFER_ENABLE, $plan !== null ? $plan->getAttribute(Plan::FIELD_TRANSFER_ENABLE) : 0);
