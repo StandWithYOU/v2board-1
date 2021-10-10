@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\User;
+use App\Models\Plan;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 class ResetTraffic extends Command
@@ -47,29 +48,53 @@ class ResetTraffic extends Command
     public function handle()
     {
         ini_set('memory_limit', -1);
-        $resetTrafficMethod = config('v2board.reset_traffic_method', 0);
-        $this->_out->writeln("reset traffic method: " . $resetTrafficMethod);
+        $commonResetTrafficMethod = config('v2board.reset_traffic_method', 0);
+        $this->_out->writeln("reset common traffic method: " . $commonResetTrafficMethod);
 
-        switch ((int)$resetTrafficMethod) {
-            // 1 a month
-            case 0:
-                $this->_resetByMonthFirstDay();
-                break;
-            // expire day
-            case 1:
-                $this->_resetByExpireDay();
-                break;
-            default:
-                break;
+        $plans = Plan::all();
+        $this->_out->writeln("reset plans count: " . count($plans));
+
+        foreach ($plans as $plan) {
+            $resetTrafficMethod = $plan->getAttribute(Plan::FIELD_RESET_TRAFFIC_METHOD);
+            $planId = $plan->getKey();
+            $this->_out->writeln("plan: " . $planId . ", reset method: " . $resetTrafficMethod);
+
+            switch ($resetTrafficMethod) {
+                case Plan::RESET_TRAFFIC_METHOD_SYSTEM:
+                    switch ((int)$commonResetTrafficMethod) {
+                        // 1 a month
+                        case Plan::RESET_TRAFFIC_METHOD_MONTH_FIRST_DAY:
+                            $this->_resetByMonthFirstDay();
+                            break;
+                        // expire day
+                        case Plan::RESET_TRAFFIC_METHOD_ORDER_DAY:
+                            $this->_resetByExpireDay();
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case Plan::RESET_TRAFFIC_METHOD_MONTH_FIRST_DAY:
+                    $this->_resetByMonthFirstDay($planId);
+                    break;
+                case Plan::RESET_TRAFFIC_METHOD_ORDER_DAY:
+                    $this->_resetByExpireDay($planId);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
     /**
      * reset by month first day
      */
-    private function _resetByMonthFirstDay(): void
+    private function _resetByMonthFirstDay($planId = 0): void
     {
         $builder = $this->builder;
+        if ($planId > 0) {
+            $builder = $builder->where(User::FIELD_PLAN_ID, $planId);
+        }
         if ((string)date('d') === '01') {
             $result = $builder->update([
                 'u' => 0,
@@ -82,9 +107,12 @@ class ResetTraffic extends Command
     /**
      * reset by expire day
      */
-    private function _resetByExpireDay(): void
+    private function _resetByExpireDay($planId = 0): void
     {
         $builder = $this->builder;
+        if ($planId > 0) {
+            $builder = $builder->where(User::FIELD_PLAN_ID, $planId);
+        }
         $lastDay = date('d', strtotime('last day of +0 months'));
         $users = [];
         foreach ($builder->get() as $item) {

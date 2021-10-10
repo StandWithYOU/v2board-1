@@ -54,6 +54,7 @@ class PlanController extends Controller
         $reqThreeYearPrice = $request->input("three_year_price");
         $reqOneTimePrice = $request->input("onetime_price");
         $reqResetPrice = $request->input("reset_price");
+        $reqResetTrafficMethod = $request->input('reset_traffic_method');
 
         DB::beginTransaction();
 
@@ -99,6 +100,7 @@ class PlanController extends Controller
         $plan->setAttribute(Plan::FIELD_THREE_YEAR_PRICE, $reqThreeYearPrice);
         $plan->setAttribute(Plan::FIELD_ONETIME_PRICE, $reqOneTimePrice);
         $plan->setAttribute(Plan::FIELD_RESET_PRICE, $reqResetPrice);
+        $plan->setAttribute(Plan::FIELD_RESET_TRAFFIC_METHOD, $reqResetTrafficMethod);
 
 
         if (!$plan->save()) {

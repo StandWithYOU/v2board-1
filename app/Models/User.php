@@ -80,6 +80,18 @@ use Illuminate\Support\Facades\DB;
  * @method static Builder|User whereUpdatedAt($value)
  * @method static Builder|User whereUuid($value)
  * @mixin Eloquent
+ * @property int $last_checkin_at
+ * @property-read Collection|\App\Models\InviteCode[] $inviteCodes
+ * @property-read int|null $invite_codes_count
+ * @property-read Collection|\App\Models\Order[] $orders
+ * @property-read int|null $orders_count
+ * @property-read Collection|\App\Models\ServerLog[] $serverLogs
+ * @property-read int|null $server_logs_count
+ * @property-read Collection|\App\Models\TicketMessage[] $ticketMessages
+ * @property-read int|null $ticket_messages_count
+ * @property-read Collection|\App\Models\Ticket[] $tickets
+ * @property-read int|null $tickets_count
+ * @method static Builder|User whereLastCheckinAt($value)
  */
 class User extends Model
 {

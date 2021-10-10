@@ -64,6 +64,7 @@ use Throwable;
  * @method static Builder|Order whereUpdatedAt($value)
  * @method static Builder|Order whereUserId($value)
  * @mixin \Eloquent
+ * @property int $created_at
  */
 class Order extends Model
 {

@@ -52,6 +52,8 @@ use App\Models\Traits\Serialize;
  * @method static Builder|Plan whereUpdatedAt($value)
  * @method static Builder|Plan whereYearPrice($value)
  * @mixin \Eloquent
+ * @property int|null $reset_traffic_method
+ * @method static Builder|Plan whereResetTrafficMethod($value)
  */
 class Plan extends Model
 {
@@ -72,6 +74,7 @@ class Plan extends Model
     const FIELD_THREE_YEAR_PRICE = "three_year_price";
     const FIELD_ONETIME_PRICE = "onetime_price";  //一次性价格
     const FIELD_RESET_PRICE = "reset_price";   //重置流量价格
+    const FIELD_RESET_TRAFFIC_METHOD = 'reset_traffic_method';
     const FIELD_CREATED_AT = "created_at";
     const FIELD_UPDATED_AT = "updated_at";
 
@@ -90,6 +93,10 @@ class Plan extends Model
     const RENEW_OFF = 0;
     const RENEW_ON = 1;
 
+    const RESET_TRAFFIC_METHOD_SYSTEM = null;
+    const RESET_TRAFFIC_METHOD_MONTH_FIRST_DAY = 0;
+    const RESET_TRAFFIC_METHOD_ORDER_DAY = 1;
+    const RESET_TRAFFIC_METHOD_NOT_RESET = 2;
 
     protected $table = 'plan';
     protected $dateFormat = 'U';

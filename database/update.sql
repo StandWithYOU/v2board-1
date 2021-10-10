@@ -30,3 +30,6 @@ ALTER TABLE `v2_user`
 ALTER TABLE `v2_user`
     ADD `last_checkin_at` int(11) NOT NULL DEFAULT '0' AFTER `transfer_enable`
 
+ALTER TABLE `v2_plan`
+    ADD `reset_traffic_method` tinyint(1) NULL AFTER `reset_price`;
+

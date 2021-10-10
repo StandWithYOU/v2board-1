@@ -211,6 +211,7 @@ CREATE TABLE `v2_plan` (
                            `three_year_price` int(11) DEFAULT NULL,
                            `onetime_price` int(11) DEFAULT NULL,
                            `reset_price` int(11) DEFAULT NULL,
+                           `reset_traffic_method` tinyint(1) DEFAULT NULL,
                            `created_at` int(11) NOT NULL,
                            `updated_at` int(11) NOT NULL,
                            PRIMARY KEY (`id`)
