@@ -60,12 +60,10 @@ class Kernel extends HttpKernel
             EncryptCookies::class,
             AddQueuedCookiesToResponse::class,
             StartSession::class,
-            // \Illuminate\Session\Middleware\AuthenticateSession::class,
             ShareErrorsFromSession::class,
             VerifyCsrfToken::class,
             SubstituteBindings::class,
         ],
-
         'api' => [
             EncryptCookies::class,
             AddQueuedCookiesToResponse::class,

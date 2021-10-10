@@ -15,20 +15,20 @@ return [
     |
     */
 
-    'paths' => ['api/*'],
+    'paths' => ['*'],
 
-    'allowed_methods' => ['GET','POST','OPTIONS'],
+    'allowed_methods' => ['*'],
 
     'allowed_origins' => ['*'],
 
     'allowed_origins_patterns' => [],
 
-    'allowed_headers' => ['Content-Type','X-Requested-With'],
+    'allowed_headers' => ['*'],
 
     'exposed_headers' => false,
 
     'max_age' => 10080,
 
-    'supports_credentials' => true,
+    'supports_credentials' => false,
 
 ];

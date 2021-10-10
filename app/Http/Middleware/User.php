@@ -16,7 +16,6 @@ class User
      */
     public function handle(Request $request, Closure $next)
     {
-
         $authorization = $request->input('auth_data') ?? $request->header('authorization');
         if ($authorization) {
             $authData = explode(':', base64_decode($authorization));
