@@ -15,6 +15,7 @@
 */
 
 SET NAMES utf8mb4;
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
@@ -38,7 +39,7 @@ DROP TABLE IF EXISTS `v2_coupon`;
 CREATE TABLE `v2_coupon` (
                              `id` int(11) NOT NULL AUTO_INCREMENT,
                              `code` varchar(255) NOT NULL,
-                             `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+                             `name` varchar(255)  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci  NOT NULL,
                              `type` tinyint(1) NOT NULL,
                              `value` int(11) NOT NULL,
                              `limit_use` int(11) DEFAULT NULL,
@@ -84,7 +85,7 @@ CREATE TABLE `v2_knowledge` (
                                 `updated_at` int(11) NOT NULL COMMENT '更新時間',
                                 PRIMARY KEY (`id`),
                                 KEY `language_show` (`language`,`show`) USING BTREE
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='知識庫';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4  COMMENT='知識庫';
 
 -- ----------------------------
 --  Table structure for `v2_mail_log`
@@ -188,7 +189,7 @@ CREATE TABLE `v2_payment` (
                               `updated_at` int(11) NOT NULL,
                               PRIMARY KEY (`id`),
                               KEY `uuid` (`uuid`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 --  Table structure for `v2_plan`
@@ -203,10 +204,10 @@ CREATE TABLE `v2_plan` (
                            `sort` int(11) DEFAULT NULL,
                            `renew` tinyint(1) NOT NULL DEFAULT '1',
                            `content` text,
-                           `month_price` int(11) DEFAULT (NULL),
-                           `quarter_price` int(11) DEFAULT (NULL),
-                           `half_year_price` int(11) DEFAULT (NULL),
-                           `year_price` int(11) DEFAULT (NULL),
+                           `month_price` int(11) DEFAULT NULL,
+                           `quarter_price` int(11) DEFAULT NULL,
+                           `half_year_price` int(11) DEFAULT NULL,
+                           `year_price` int(11) DEFAULT NULL,
                            `two_year_price` int(11) DEFAULT NULL,
                            `three_year_price` int(11) DEFAULT NULL,
                            `onetime_price` int(11) DEFAULT NULL,
@@ -217,31 +218,6 @@ CREATE TABLE `v2_plan` (
                            PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
--- ----------------------------
---  Table structure for `v2_plan_empty`
--- ----------------------------
-DROP TABLE IF EXISTS `v2_plan_empty`;
-CREATE TABLE `v2_plan_empty` (
-                                 `id` int(11) NOT NULL AUTO_INCREMENT,
-                                 `group_id` int(11) NOT NULL,
-                                 `transfer_enable` int(11) NOT NULL,
-                                 `name` varchar(255) NOT NULL,
-                                 `show` tinyint(1) NOT NULL DEFAULT '0',
-                                 `sort` int(11) DEFAULT NULL,
-                                 `renew` tinyint(1) NOT NULL DEFAULT '1',
-                                 `content` text,
-                                 `month_price` int(11) DEFAULT '0',
-                                 `quarter_price` int(11) DEFAULT '0',
-                                 `half_year_price` int(11) DEFAULT '0',
-                                 `year_price` int(11) DEFAULT '0',
-                                 `two_year_price` int(11) DEFAULT NULL,
-                                 `three_year_price` int(11) DEFAULT NULL,
-                                 `onetime_price` int(11) DEFAULT NULL,
-                                 `reset_price` int(11) DEFAULT NULL,
-                                 `created_at` int(11) NOT NULL,
-                                 `updated_at` int(11) NOT NULL,
-                                 PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `v2_server`
@@ -283,7 +259,7 @@ CREATE TABLE `v2_server_group` (
                                    `created_at` int(11) NOT NULL,
                                    `updated_at` int(11) NOT NULL,
                                    PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `v2_server_log`
@@ -330,7 +306,7 @@ CREATE TABLE `v2_server_shadowsocks` (
                                          PRIMARY KEY (`id`),
                                          KEY `show` (`show`) USING BTREE,
                                          KEY `parent_id` (`parent_id`) USING BTREE
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 --  Table structure for `v2_server_stat`
@@ -375,7 +351,7 @@ CREATE TABLE `v2_server_trojan` (
                                     PRIMARY KEY (`id`),
                                     KEY `show` (`show`) USING BTREE,
                                     KEY `parent_id` (`parent_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='trojan伺服器表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='trojan伺服器表';
 
 -- ----------------------------
 --  Table structure for `v2_ticket`
