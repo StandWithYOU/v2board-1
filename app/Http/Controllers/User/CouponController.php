@@ -33,7 +33,7 @@ class CouponController extends Controller
         try {
             $coupon = Coupon::checkCode($reqCode, $reqPlanID, $sessionID);
         } catch (CouponException $e) {
-            abort($e->getCode(), $e->getMessage());
+            abort(500, $e->getMessage());
         }
 
         return response([
