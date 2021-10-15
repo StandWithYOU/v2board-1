@@ -584,7 +584,9 @@ class User extends Model
      */
     public static function countEffectivePlanUsers($planId): int
     {
-        return self::where(self::FIELD_PLAN_ID, $planId)->where(self::FIELD_EXPIRED_AT, '>=', time())->count();
+        return self::where(self::FIELD_PLAN_ID, $planId)->where(function($query) {
+            $query->orWhere(self::FIELD_EXPIRED_AT, NULL)->orWhere(self::FIELD_EXPIRED_AT, '>=', time());
+        })->count();
     }
 
     /**
