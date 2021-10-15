@@ -120,7 +120,12 @@ class AuthController extends Controller
                 $user->setAttribute(User::FIELD_TRANSFER_ENABLE, $plan->getAttribute(User::FIELD_TRANSFER_ENABLE) * 1073741824);
                 $user->setAttribute(User::FIELD_PLAN_ID, $plan->getKey());
                 $user->setAttribute(User::FIELD_GROUP_ID, $plan->getAttribute(Plan::FIELD_GROUP_ID) ?: 0);
-                $user->setAttribute(User::FIELD_EXPIRED_AT, time() + (config('v2board.try_out_hour', 1) * 3600));
+                $configTryOutHour = (config('v2board.try_out_hour', 1) * 3600);
+                if ($configTryOutHour === 0) {
+                    $user->setAttribute(User::FIELD_EXPIRED_AT, null);
+                } else {
+                    $user->setAttribute(User::FIELD_EXPIRED_AT, time() + (config('v2board.try_out_hour', 1) * 3600));
+                }
             }
         }
 
