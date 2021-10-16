@@ -597,34 +597,11 @@ class Order extends Model
             default:
                 $orderType = $this->getAttribute(Order::FIELD_TYPE);
                 $orderCycle = $this->getAttribute(Order::FIELD_CYCLE);
-                $userExpiredAt = (int)$user->getAttribute(User::FIELD_EXPIRED_AT);
-
-                if ($orderType === Order::TYPE_NEW_ORDER || $userExpiredAt === 0) {
-                    $user->resetTraffic();
-                } else if ($orderType == Order::TYPE_UPGRADE) {
-                    $user->setAttribute(User::FIELD_EXPIRED_AT, time());
-                }
-
-                $user->buyPlan($plan, Plan::expiredTime($orderCycle, $user->getAttribute(User::FIELD_EXPIRED_AT)));
-        }
-
-        $orderType = $this->getAttribute(Order::FIELD_TYPE);
-        switch ((int)$orderType) {
-            case Order::TYPE_NEW_ORDER:
-                if (config('v2board.new_order_event_id', 0)) {
+                $userExpiredAt = $user->getAttribute(User::FIELD_EXPIRED_AT);
+                if ($orderType === Order::TYPE_NEW_ORDER || ($orderType=== Order::TYPE_UPGRADE && $userExpiredAt === null)) {
                     $user->resetTraffic();
                 }
-                break;
-            case Order::TYPE_RENEW:
-                if (config('v2board.renew_order_event_id', 0)) {
-                    $user->resetTraffic();
-                }
-                break;
-            case Order::TYPE_UPGRADE:
-                if (config('v2board.change_order_event_id', 0)) {
-                    $user->resetTraffic();
-                }
-                break;
+                $user->buyPlan($plan, Plan::expiredTime($orderCycle, $userExpiredAt));
         }
 
         if (!$user->save()) {
