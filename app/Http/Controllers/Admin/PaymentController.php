@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\Admin\PaymentSave;
 use App\Services\PaymentService;
 use App\Utils\Helper;
 use Exception;
@@ -65,10 +66,10 @@ class PaymentController extends Controller
     /**
      * save
      *
-     * @param Request $request
+     * @param PaymentSave $request
      * @return Application|ResponseFactory|Response
      */
-    public function save(Request $request)
+    public function save(PaymentSave $request)
     {
         $reqId = (int)$request->input('id');
         $reqName = $request->input('name');
