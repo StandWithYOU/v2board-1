@@ -382,6 +382,10 @@ class Order extends Model
                 continue;
             }
 
+            if ($order->getAttribute(self::FIELD_CYCLE) === self::CYCLE_ONETIME) {
+                continue;
+            }
+
             if ($order->isExpired()) {
                 continue;
             }
