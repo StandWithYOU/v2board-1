@@ -5,8 +5,8 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 --  Table structure for `failed_jobs`
 -- ----------------------------
-DROP TABLE IF EXISTS `failed_jobs`;
-CREATE TABLE `failed_jobs` (
+DROP TABLE IF EXISTS `v2_failed_jobs`;
+CREATE TABLE `v2_failed_jobs` (
                                `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
                                `connection` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
                                `queue` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
