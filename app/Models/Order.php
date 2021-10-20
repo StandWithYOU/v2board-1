@@ -220,14 +220,13 @@ class Order extends Model
     {
         $cycle = $this->getAttribute(self::FIELD_CYCLE);
         $userPlanId = (int)$user->getAttribute(User::FIELD_PLAN_ID);
-        $userExpiredAt = (int)$user->getAttribute(User::FIELD_EXPIRED_AT);
         $planId = (int)$this->getAttribute(Order::FIELD_PLAN_ID);
 
         if ($cycle === self::CYCLE_RESET_PRICE) {
             $type = self::TYPE_RESET_PRICE;
-        } else if ($userPlanId !== 0 && $planId !== $userPlanId && ($userExpiredAt > time() || $userExpiredAt === 0)) {
+        } else if ($userPlanId !== 0 && $planId !== $userPlanId) {
             $type = self::TYPE_UPGRADE;
-        } else if ($userExpiredAt > time() && $planId == $userPlanId) { // 用户订阅未过期且购买订阅与当前订阅相同 === 续费
+        } else if ($planId == $userPlanId) {
             $type = self::TYPE_RENEW;
         } else { // 新购
             $type = self::TYPE_NEW_ORDER;
