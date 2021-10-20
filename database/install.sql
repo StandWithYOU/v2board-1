@@ -1,19 +1,3 @@
-/*
- Navicat Premium Data Transfer
-
- Source Server         : localhost
- Source Server Type    : MySQL
- Source Server Version : 80016
- Source Host           : localhost
- Source Database       : v2board
-
- Target Server Type    : MySQL
- Target Server Version : 80016
- File Encoding         : utf-8
-
- Date: 09/25/2021 03:30:12 AM
-*/
-
 SET NAMES utf8mb4;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET FOREIGN_KEY_CHECKS = 0;
@@ -387,21 +371,6 @@ CREATE TABLE `v2_ticket_message` (
                                      KEY `ticket_id` (`ticket_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
---  Table structure for `v2_tutorial`
--- ----------------------------
-DROP TABLE IF EXISTS `v2_tutorial`;
-CREATE TABLE `v2_tutorial` (
-                               `id` int(11) NOT NULL AUTO_INCREMENT,
-                               `category_id` int(11) NOT NULL,
-                               `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-                               `steps` text,
-                               `show` tinyint(1) NOT NULL DEFAULT '0',
-                               `sort` int(11) DEFAULT NULL,
-                               `created_at` int(11) NOT NULL,
-                               `updated_at` int(11) NOT NULL,
-                               PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 --  Table structure for `v2_user`
