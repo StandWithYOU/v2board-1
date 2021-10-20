@@ -41,7 +41,7 @@ class OrderController extends Controller
             $conditions[Order::FIELD_STATUS] = (int)$reqStatus;
         }
 
-        $orders = Order::where($conditions)->orderBy(Order::CREATED_AT)->get();
+        $orders = Order::where($conditions)->orderBy(Order::CREATED_AT, 'desc')->get();
         $plans = Plan::get();
 
         foreach ($orders as $order) {
