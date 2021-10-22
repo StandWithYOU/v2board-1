@@ -105,7 +105,9 @@ class AuthController extends Controller
                     $inviteCode->getAttribute(InviteCode::FIELD_USER_ID) : null);
                 if (!(int)config('v2board.invite_never_expire', 0)) {
                     $inviteCode->setAttribute(InviteCode::FIELD_STATUS, InviteCode::STATUS_USED);
-                    $inviteCode->save();
+                    if (!$inviteCode->save()) {
+                        abort(500, __('Save failed'));
+                    }
                 }
             }
         }
@@ -136,12 +138,6 @@ class AuthController extends Controller
         if ((int)config('v2board.email_verify', 0)) {
             Cache::forget(CacheKey::get('EMAIL_VERIFY_CODE', $request->input('email')));
         }
-
-
-        $data = [
-            'token' => $user->getAttribute(User::FIELD_TOKEN),
-            'auth_data' => base64_encode("{$user->getAttribute(User::FIELD_EMAIL)}:{$user->getAttribute(User::FIELD_PASSWORD)}")
-        ];
 
         $request->session()->put('email', $user->getAttribute(User::FIELD_EMAIL));
         $request->session()->put('id', $user->getKey());
