@@ -59,24 +59,21 @@ class DeepbworkController extends Controller
 
         Cache::put(CacheKey::get('SERVER_V2RAY_LAST_CHECK_AT', $server->getKey()), time(), 3600);
         $result = [];
-        if ($server->isShow()) {
-            $users = $server->findAvailableUsers();
-            foreach ($users as $user) {
-                /**
-                 * @var User $user
-                 */
-                $user->setAttribute("v2ray_user", [
-                    "uuid" => $user->getAttribute(User::FIELD_UUID),
-                    "email" => sprintf("%s@v2board.user", $user->getAttribute(User::FIELD_UUID)),
-                    "alter_id" => $server->getAttribute(Server::FIELD_ALTER_ID),
-                    "level" => 0,
-                ]);
-                unset($user['uuid']);
-                unset($user['email']);
-                array_push($result, $user);
-            }
+        $users = $server->findAvailableUsers();
+        foreach ($users as $user) {
+            /**
+             * @var User $user
+             */
+            $user->setAttribute("v2ray_user", [
+                "uuid" => $user->getAttribute(User::FIELD_UUID),
+                "email" => sprintf("%s@v2board.user", $user->getAttribute(User::FIELD_UUID)),
+                "alter_id" => $server->getAttribute(Server::FIELD_ALTER_ID),
+                "level" => 0,
+            ]);
+            unset($user['uuid']);
+            unset($user['email']);
+            array_push($result, $user);
         }
-
 
         return response([
             'msg' => 'ok',

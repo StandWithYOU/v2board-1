@@ -57,20 +57,19 @@ class ShadowsocksTidalabController extends Controller
         Cache::put(CacheKey::get('SERVER_SHADOWSOCKS_LAST_CHECK_AT', $server->getKey()), time(), 3600);
 
         $result = [];
-        if ($server->isShow()) {
-            $users = $server->findAvailableUsers();
-            foreach ($users as $user) {
-                /**
-                 * @var User $user
-                 */
-                array_push($result, [
-                    'id' => $user->getKey(),
-                    'port' => $server->getAttribute(ServerShadowsocks::FIELD_PORT),
-                    'cipher' => $server->getAttribute(ServerShadowsocks::FIELD_CIPHER),
-                    'secret' => $user->getAttribute(User::FIELD_UUID)
-                ]);
-            }
+        $users = $server->findAvailableUsers();
+        foreach ($users as $user) {
+            /**
+             * @var User $user
+             */
+            array_push($result, [
+                'id' => $user->getKey(),
+                'port' => $server->getAttribute(ServerShadowsocks::FIELD_PORT),
+                'cipher' => $server->getAttribute(ServerShadowsocks::FIELD_CIPHER),
+                'secret' => $user->getAttribute(User::FIELD_UUID)
+            ]);
         }
+
         return response([
             'data' => $result
         ]);
