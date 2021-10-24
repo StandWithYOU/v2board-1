@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\Serialize;
@@ -30,7 +31,7 @@ use App\Models\Traits\Serialize;
  * @method static Builder|Knowledge whereSort($value)
  * @method static Builder|Knowledge whereTitle($value)
  * @method static Builder|Knowledge whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class Knowledge extends Model
 {

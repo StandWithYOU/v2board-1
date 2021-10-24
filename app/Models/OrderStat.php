@@ -47,7 +47,7 @@ class OrderStat extends Model
 
 
     const RECORD_TYPE_D = 'd'; //day;
-    const RECORY_TYPE_M = 'm'; //month
+    const RECORD_TYPE_M = 'm'; //month
 
     protected $table = 'order_stat';
     protected $dateFormat = 'U';

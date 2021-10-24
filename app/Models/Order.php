@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -63,7 +64,7 @@ use Throwable;
  * @method static Builder|Order whereType($value)
  * @method static Builder|Order whereUpdatedAt($value)
  * @method static Builder|Order whereUserId($value)
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class Order extends Model
 {

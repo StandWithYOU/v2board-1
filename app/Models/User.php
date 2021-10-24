@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Eloquent;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Traits\Serialize;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 /**
  * App\Models\User
@@ -81,15 +83,15 @@ use Illuminate\Support\Facades\DB;
  * @method static Builder|User whereUuid($value)
  * @mixin Eloquent
  * @property int $last_checkin_at
- * @property-read Collection|\App\Models\InviteCode[] $inviteCodes
+ * @property-read Collection|InviteCode[] $inviteCodes
  * @property-read int|null $invite_codes_count
- * @property-read Collection|\App\Models\Order[] $orders
+ * @property-read Collection|Order[] $orders
  * @property-read int|null $orders_count
- * @property-read Collection|\App\Models\ServerLog[] $serverLogs
+ * @property-read Collection|ServerLog[] $serverLogs
  * @property-read int|null $server_logs_count
- * @property-read Collection|\App\Models\TicketMessage[] $ticketMessages
+ * @property-read Collection|TicketMessage[] $ticketMessages
  * @property-read int|null $ticket_messages_count
- * @property-read Collection|\App\Models\Ticket[] $tickets
+ * @property-read Collection|Ticket[] $tickets
  * @property-read int|null $tickets_count
  * @method static Builder|User whereLastCheckinAt($value)
  */
@@ -510,7 +512,7 @@ class User extends Model
      *
      *
      * @return bool
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function drop(): bool
     {
@@ -522,7 +524,7 @@ class User extends Model
             $this->ticketMessages()->delete();
             $this->serverLogs()->delete();
             $this->delete();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
         }
         Db::commit();

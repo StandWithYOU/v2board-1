@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\Serialize;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Exceptions\CouponException;
@@ -37,7 +38,7 @@ use App\Models\Exceptions\CouponException;
  * @method static Builder|Coupon whereType($value)
  * @method static Builder|Coupon whereUpdatedAt($value)
  * @method static Builder|Coupon whereValue($value)
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class Coupon extends Model
 {
@@ -73,7 +74,7 @@ class Coupon extends Model
      */
     public static function existCode(string $code): bool
     {
-        return self::where(self::FIELD_CODE, $code)->count > 0;
+        return self::where(self::FIELD_CODE, $code)->count() > 0;
     }
 
 

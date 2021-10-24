@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\Serialize;
@@ -24,7 +25,7 @@ use App\Models\Traits\Serialize;
  * @method static Builder|TicketMessage whereTicketId($value)
  * @method static Builder|TicketMessage whereUpdatedAt($value)
  * @method static Builder|TicketMessage whereUserId($value)
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class TicketMessage extends Model
 {

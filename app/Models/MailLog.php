@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\Serialize;
@@ -26,7 +27,7 @@ use App\Models\Traits\Serialize;
  * @method static Builder|MailLog whereSubject($value)
  * @method static Builder|MailLog whereTemplateName($value)
  * @method static Builder|MailLog whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class MailLog extends Model
 {

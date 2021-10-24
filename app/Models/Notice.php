@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\Serialize;
@@ -24,7 +25,7 @@ use App\Models\Traits\Serialize;
  * @method static Builder|Notice whereImgUrl($value)
  * @method static Builder|Notice whereTitle($value)
  * @method static Builder|Notice whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class Notice extends Model
 {

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Traits\Serialize;
 use App\Utils\CacheKey;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
@@ -56,7 +57,7 @@ use StdClass;
  * @method static Builder|Server whereTls($value)
  * @method static Builder|Server whereTlsSettings($value)
  * @method static Builder|Server whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class Server extends Model
 {
