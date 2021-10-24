@@ -93,7 +93,7 @@ class Coupon extends Model
          * @var Coupon $coupon
          */
         $coupon = self::findByCode($code);
-        if ($coupon == null) {
+        if ($coupon === null) {
             throw new CouponException(__('Invalid coupon'), 1);
         }
 

@@ -11,6 +11,7 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class CouponController extends Controller
 {
@@ -42,6 +43,7 @@ class CouponController extends Controller
      *
      * @param CouponGenerate $request
      * @return ResponseFactory|Response|void
+     * @throws Throwable
      */
     public function generate(CouponGenerate $request)
     {
@@ -103,6 +105,7 @@ class CouponController extends Controller
      * @param CouponGenerate $request
      *
      * @return void
+     * @throws Throwable
      */
     private function multiGenerate(CouponGenerate $request)
     {
@@ -154,7 +157,7 @@ class CouponController extends Controller
             $createTime = date('Y-m-d H:i:s', time());
             $limitPlanIds = is_array($coupon->getAttribute(Coupon::FIELD_LIMIT_PLAN_IDS))
                 ? implode("/", $coupon->getAttribute(Coupon::FIELD_LIMIT_PLAN_IDS)) : '不限制';
-           $data .= "{$name},{$type},{$value},{$startTime},{$endTime},{$limitUse},{$limitPlanIds},{$code},{$createTime}\r\n";
+           $data .= "{$name},$type,{$value},{$startTime},{$endTime},{$limitUse},{$limitPlanIds},{$code},{$createTime}\r\n";
         }
         echo $data;
     }
@@ -177,7 +180,7 @@ class CouponController extends Controller
          * @var Coupon $coupon
          */
         $coupon = Coupon::find($reqId);
-        if ($coupon == null) {
+        if ($coupon === null) {
             abort(500, '优惠券不存在');
         }
 

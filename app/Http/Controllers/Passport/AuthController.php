@@ -8,6 +8,7 @@ use App\Http\Requests\Passport\AuthForget;
 use App\Http\Requests\Passport\AuthLogin;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
@@ -17,7 +18,6 @@ use App\Models\InviteCode;
 use App\Utils\Helper;
 use App\Utils\Dict;
 use App\Utils\CacheKey;
-use Illuminate\Validation\Rules\In;
 use ReCaptcha\ReCaptcha;
 
 class AuthController extends Controller
@@ -26,9 +26,9 @@ class AuthController extends Controller
      * register
      *
      * @param AuthRegister $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function register(AuthRegister $request)
+    public function register(AuthRegister $request): JsonResponse
     {
         $reqRecaptchaData = $request->input('recaptcha_data');
         $reqEmail = $request->input('email');

@@ -30,7 +30,7 @@ class TicketController extends Controller
              * @var Ticket $ticket
              */
             $ticket = Ticket::find($reqId);
-            if ($ticket == null) {
+            if ($ticket === null) {
                 abort(500, '工单不存在');
             }
 
@@ -102,7 +102,7 @@ class TicketController extends Controller
          * @var Ticket $ticket
          */
         $ticket = Ticket::find($reqId);
-        if ($ticket == null) {
+        if ($ticket === null) {
             abort(500, '工单不存在');
         }
 
@@ -145,7 +145,7 @@ class TicketController extends Controller
          * @var Ticket $ticket
          */
         $ticket = Ticket::find($reqId);
-        if ($ticket == null) {
+        if ($ticket === null) {
             abort(500, '工单不存在');
         }
 

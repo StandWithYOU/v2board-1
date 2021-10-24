@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\ServerShadowsocks;
 use App\Models\ServerTrojan;
-use Illuminate\Http\Request;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use App\Http\Controllers\Controller;
 use App\Models\Server;
 use App\Models\User;
@@ -12,6 +12,7 @@ use App\Models\Ticket;
 use App\Models\Order;
 use App\Models\OrderStat;
 use App\Models\ServerStat;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
 class StatController extends Controller
@@ -20,10 +21,9 @@ class StatController extends Controller
     /**
      * override
      *
-     * @param Request $request
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @return ResponseFactory|Response
      */
-    public function override(Request $request)
+    public function override()
     {
         return response([
             'data' => [
@@ -40,10 +40,9 @@ class StatController extends Controller
     /**
      * order
      *
-     * @param Request $request
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @return ResponseFactory|Response
      */
-    public function order(Request $request)
+    public function order()
     {
         $orderStats = OrderStat::where(OrderStat::FIELD_RECORD_TYPE, OrderStat::RECORD_TYPE_D)
             ->limit(31)

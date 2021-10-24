@@ -37,7 +37,7 @@ class CommController extends Controller
             ->where('payment', 'StripeCredit')
             ->first();
 
-        if ($payment == null) {
+        if ($payment === null) {
             abort(500, 'payment is not found');
         }
         $config = $payment->getAttribute(Payment::FIELD_CONFIG);

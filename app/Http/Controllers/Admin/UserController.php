@@ -34,7 +34,7 @@ class UserController extends Controller
         /**
          * @var User $user
          */
-        if ($user == null) {
+        if ($user === null) {
             abort(500, '用户不存在');
         }
 
@@ -376,7 +376,7 @@ class UserController extends Controller
              * @var Plan $plan
              */
             $plan = Plan::find($reqPlanId);
-            if ($plan == null) {
+            if ($plan === null) {
                 abort(500, '订阅计划不存在');
             }
         }
@@ -419,7 +419,7 @@ class UserController extends Controller
              * @var Plan $plan
              */
             $plan = Plan::find($reqPlanId);
-            if ($plan == null) {
+            if ($plan === null) {
                 abort(500, '订阅计划不存在');
             }
         } else {

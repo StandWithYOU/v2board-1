@@ -19,6 +19,7 @@ use App\Models\Plan;
 use App\Models\User;
 use App\Utils\Helper;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class OrderController extends Controller
 {
@@ -80,7 +81,7 @@ class OrderController extends Controller
          * @var Order $order
          */
         $order = Order::findByTradeNo($reqTradeNo);
-        if ($order == null) {
+        if ($order === null) {
             abort(500, __('Order does not exist or has been paid'));
         }
 
@@ -99,6 +100,7 @@ class OrderController extends Controller
      *
      * @param OrderSave $request
      * @return Application|ResponseFactory|Response
+     * @throws Throwable
      */
     public function save(OrderSave $request)
     {
@@ -338,6 +340,7 @@ class OrderController extends Controller
      *
      * @param Request $request
      * @return Application|ResponseFactory|Response
+     * @throws Throwable
      */
     public function cancel(Request $request)
     {

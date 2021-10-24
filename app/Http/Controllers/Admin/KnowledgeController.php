@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class KnowledgeController extends Controller
 {
@@ -25,7 +26,7 @@ class KnowledgeController extends Controller
         $reqId = (int)$request->input('id');
         if ($reqId > 0) {
             $knowledge = Knowledge::find($reqId);
-            if ($knowledge == null) {
+            if ($knowledge === null) {
                 abort(500, '知识不存在');
             }
             $data = $knowledge;
@@ -68,11 +69,11 @@ class KnowledgeController extends Controller
         $reqTitle = $request->input('title');
         $reqBody = $request->input('body');
 
-        if ($reqId == null) {
+        if ($reqId === null) {
             $knowledge = new Knowledge();
         } else {
             $knowledge = KnowLedge::find($reqId);
-            if ($knowledge == null) {
+            if ($knowledge === null) {
                 abort(500, '知识不存在');
             }
         }
@@ -110,7 +111,7 @@ class KnowledgeController extends Controller
          * @var Knowledge $knowledge
          */
         $knowledge = Knowledge::find($reqId);
-        if ($knowledge == null) {
+        if ($knowledge === null) {
             abort(500, '知识不存在');
         }
         $knowledge->setAttribute(Knowledge::FIELD_SHOW, $knowledge->getAttribute(Knowledge::FIELD_SHOW) ?
@@ -129,6 +130,7 @@ class KnowledgeController extends Controller
      *
      * @param KnowledgeSort $request
      * @return ResponseFactory|Response
+     * @throws Throwable
      */
     public function sort(KnowledgeSort $request)
     {

@@ -18,6 +18,7 @@ use App\Models\Plan;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 
 class OrderController extends Controller
@@ -102,6 +103,7 @@ class OrderController extends Controller
      *
      * @param Request $request
      * @return Application|ResponseFactory|Response
+     * @throws Throwable
      */
     public function cancel(Request $request)
     {
@@ -202,6 +204,7 @@ class OrderController extends Controller
      *
      * @param OrderAssign $request
      * @return Application|ResponseFactory|Response
+     * @throws Throwable
      */
     public function assign(OrderAssign $request)
     {

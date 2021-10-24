@@ -26,7 +26,7 @@ class InviteController extends Controller
          * @var User $user
          */
         $user = User::find($sessionId);
-        if ($user == null) {
+        if ($user === null) {
             abort(500, __('The user does not exist'));
         }
 
@@ -58,7 +58,7 @@ class InviteController extends Controller
          * @var User $user
          */
         $user = User::find($sessionId);
-        if ($user == null) {
+        if ($user === null) {
             abort(500, __('The user does not exist'));
         }
         $invitedOrderDetails = $user->getInvitedOrderDetails(Order::STATUS_COMPLETED);
@@ -80,7 +80,7 @@ class InviteController extends Controller
          * @var User $user
          */
         $user = User::find($sessionId);
-        if ($user == null) {
+        if ($user === null) {
             abort(500, __('The user does not exist'));
         }
 

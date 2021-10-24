@@ -46,7 +46,7 @@ class UserController extends Controller
          * @var User $user
          */
         $user = User::find($sessionId);
-        if ($user == null) {
+        if ($user === null) {
             abort(500, __('The user does not exist'));
         }
 
@@ -151,7 +151,7 @@ class UserController extends Controller
          */
         $user = User::find($sessionId);
 
-        if ($user == null) {
+        if ($user === null) {
             abort(500, __('The user does not exist'));
         }
 
@@ -194,7 +194,7 @@ class UserController extends Controller
          * @var User $user
          */
         $user = User::find($sessionId);
-        if ($user == null) {
+        if ($user === null) {
             abort(500, __('The user does not exist'));
         }
 
@@ -225,7 +225,7 @@ class UserController extends Controller
          * @var User $user
          */
         $user = User::find($sessionId);
-        if ($user == null) {
+        if ($user === null) {
             abort(500, __('The user does not exist'));
         }
 
@@ -260,7 +260,7 @@ class UserController extends Controller
          * @var User $user
          */
         $user = User::find($sessionId);
-        if ($user == null) {
+        if ($user === null) {
             abort(500, __('The user does not exist'));
         }
 

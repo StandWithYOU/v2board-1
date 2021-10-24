@@ -36,26 +36,18 @@ class KnowledgeController extends Controller
              * @var User $user
              */
             $user = User::find($sessionId);
-            if ($user == null) {
+            if ($user === null) {
                 abort(500, __('The user does not exist'));
             }
 
             $knowBody = $knowledge->getAttribute(Knowledge::FIELD_BODY);
-            if ($user->isAvailable()) {
-                $appleId = config('v2board.apple_id');
-                $appleIdPassword = config('v2board.apple_id_password');
-            } else {
-                $appleId = __('No active subscription. Unable to use our provided Apple ID');
-                $appleIdPassword = __('No active subscription. Unable to use our provided Apple ID');
-                $this->formatAccessData($knowBody);
-            }
 
             $subscribeUrl = config('v2board.app_url', env('APP_URL'));
             $subscribeUrls = explode(',', config('v2board.subscribe_url'));
             if ($subscribeUrls) {
                 $subscribeUrl = $subscribeUrls[rand(0, count($subscribeUrls) - 1)];
             }
-            $subscribeUrl = "{$subscribeUrl}/api/v1/client/subscribe?token={$user['token']}";
+            $subscribeUrl = "$subscribeUrl/api/v1/client/subscribe?token={$user['token']}";
 
             $knowBody = str_replace('{{siteName}}', config('v2board.app_name', 'V2Board'), $knowBody);
             $knowBody = str_replace('{{subscribeUrl}}', $subscribeUrl, $knowBody);
@@ -86,21 +78,5 @@ class KnowledgeController extends Controller
         ]);
     }
 
-    /**
-     * format data
-     *
-     * @param string $body
-     */
-    private function formatAccessData(string &$body)
-    {
-        function getBetween($input, $start, $end)
-        {
-            return substr($input, strlen($start) + strpos($input, $start), (strlen($input) - strpos($input, $end)) * (-1));
-        }
 
-        $accessData = getBetween($body, '<!--access start-->', '<!--access end-->');
-        if ($accessData) {
-            $body = str_replace($accessData, '<div class="v2board-no-access">'. __('You must have a valid subscription to view content in this area') .'</div>', $body);
-        }
-    }
 }

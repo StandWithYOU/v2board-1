@@ -64,7 +64,7 @@ class PlanController extends Controller
              * @var Plan $plan
              */
             $plan = Plan::find($reqId);
-            if ($plan == null) {
+            if ($plan === null) {
                 abort(500, '该订阅不存在');
             }
             // update user group id and transfer
@@ -134,7 +134,7 @@ class PlanController extends Controller
          * @var Plan $plan
          */
         $plan = Plan::find($reqId);
-        if ($plan == null) {
+        if ($plan === null) {
             abort(500, '该订阅ID不存在');
         }
 
@@ -172,7 +172,7 @@ class PlanController extends Controller
          * @var Plan $plan
          */
         $plan = Plan::find($reqId);
-        if ($plan == null) {
+        if ($plan === null) {
             abort(500, '该订阅不存在');
         }
 
@@ -208,7 +208,7 @@ class PlanController extends Controller
              * @var Plan $plan
              */
             $plan = Plan::find($id);
-            if ($plan == null) {
+            if ($plan === null) {
                 DB::rollBack();
                 abort(500, '知识数据异常');
             }

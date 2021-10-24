@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\Admin\NoticeSave;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
@@ -66,6 +67,7 @@ class NoticeController extends Controller
      *
      * @param Request $request
      * @return Application|ResponseFactory|Response
+     * @throws Exception
      */
     public function drop(Request $request)
     {

@@ -94,7 +94,7 @@ class MailService
     {
         $userId = $ticket->getAttribute(Ticket::FIELD_USER_ID);
         $user = User::find($userId);
-        if ($user == null) {
+        if ($user === null) {
             return;
         }
 

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\TicketSave;
 use App\Http\Requests\User\TicketWithdraw;
-use App\Jobs\SendTelegramJob;
 use App\Models\User;
 use App\Services\TelegramService;
 use App\Utils\Dict;
@@ -15,6 +14,7 @@ use App\Models\Ticket;
 use App\Models\TicketMessage;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class TicketController extends Controller
 {
@@ -30,7 +30,7 @@ class TicketController extends Controller
         $reqId = (int)$request->input('id');
         if ($reqId > 0) {
             $ticket = Ticket::findFirstByUserId($reqId, $sessionId);
-            if ($ticket == null) {
+            if ($ticket === null) {
                 abort(500, __('Ticket does not exist'));
             }
 
@@ -71,6 +71,7 @@ class TicketController extends Controller
      *
      * @param TicketSave $request
      * @return ResponseFactory|Response
+     * @throws Throwable
      */
     public function save(TicketSave $request)
     {
@@ -79,7 +80,7 @@ class TicketController extends Controller
          * @var User $user
          */
         $user = User::find($sessionId);
-        if ($user == NULL) {
+        if ($user === null) {
             abort(500, __('user.user.info.user_not_exist'));
         }
 
@@ -124,6 +125,7 @@ class TicketController extends Controller
      *
      * @param Request $request
      * @return ResponseFactory|Response
+     * @throws Throwable
      */
     public function reply(Request $request)
     {
@@ -143,7 +145,7 @@ class TicketController extends Controller
 
         $ticket = Ticket::findFirstByUserId($reqId, $sessionId);
 
-        if ($ticket == null) {
+        if ($ticket === null) {
             abort(500, __('Ticket does not exist'));
         }
         if ($ticket->getAttribute(Ticket::FIELD_STATUS) != Ticket::STATUS_OPEN) {
@@ -192,7 +194,7 @@ class TicketController extends Controller
         }
         $ticket = Ticket::findFirstByUserId($reqId, $sessionId);
 
-        if ($ticket == null) {
+        if ($ticket === null) {
             abort(500, __('Ticket does not exist'));
         }
 
@@ -207,6 +209,9 @@ class TicketController extends Controller
     }
 
 
+    /**
+     * @throws Throwable
+     */
     public function withdraw(TicketWithdraw $request)
     {
         $reqWithdrawMethod = $request->input('withdraw_method');
