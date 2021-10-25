@@ -557,6 +557,7 @@ class Order extends Model
      */
     public function open() : bool
     {
+        DB::beginTransaction();
         /**
          * @var User $user
          */
