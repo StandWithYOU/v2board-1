@@ -13,6 +13,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use App\Utils\CacheKey;
+use Throwable;
 
 
 class ManageController extends Controller
@@ -20,10 +21,9 @@ class ManageController extends Controller
     /**
      * get nodes
      *
-     * @param Request $request
      * @return Application|ResponseFactory|Response
      */
-    public function getNodes(Request $request)
+    public function getNodes()
     {
         //get shadowSocks servers
         $shadowServers = ServerShadowsocks::nodes();
@@ -68,6 +68,7 @@ class ManageController extends Controller
      *
      * @param Request $request
      * @return Application|ResponseFactory|Response
+     * @throws Throwable
      */
     public function sort(Request $request)
     {
@@ -103,6 +104,7 @@ class ManageController extends Controller
             }
         }
         DB::commit();
+
         return response([
             'data' => true
         ]);

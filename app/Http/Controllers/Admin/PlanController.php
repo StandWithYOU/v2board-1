@@ -14,16 +14,16 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class PlanController extends Controller
 {
     /**
      * fetch
      *
-     * @param Request $request
      * @return ResponseFactory|Response
      */
-    public function fetch(Request $request)
+    public function fetch()
     {
         $plans = Plan::orderBy(Plan::FIELD_SORT, "ASC")->get();
         foreach ($plans as $plan) {
@@ -38,6 +38,9 @@ class PlanController extends Controller
         ]);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function save(PlanSave $request)
     {
         $reqId = (int)$request->input('id');
@@ -198,6 +201,9 @@ class PlanController extends Controller
      *
      * @param PlanSort $request
      * @return ResponseFactory|Response
+     *
+     *
+     * @throws Throwable
      */
     public function sort(PlanSort $request)
     {
