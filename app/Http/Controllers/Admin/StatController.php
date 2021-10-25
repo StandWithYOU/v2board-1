@@ -29,8 +29,8 @@ class StatController extends Controller
             'data' => [
                 'month_income' => Order::sumMonthIncome(),
                 'month_register_total' => User::countMonthRegister(),
-                'ticket_pendding_total' => Ticket::countTicketPending(),
-                'commission_pendding_total' => Order::countCommissionPending(),
+                'ticket_pending_total' => Ticket::countTicketPending(),
+                'commission_pending_total' => Order::countCommissionPending(),
                 'day_income' => Order::sumDayIncome(),
                 'last_month_income' => Order::sumLastMonthIncome()
             ]
