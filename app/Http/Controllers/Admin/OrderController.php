@@ -29,7 +29,7 @@ class OrderController extends Controller
      * @param Request $request
      * @param $builder
      */
-    private function _filter(Request $request, &$builder)
+    private function _filter(Request $request, $builder)
     {
         $reqFilter = (array)$request->input('filter');
         foreach ($reqFilter as $filter) {
