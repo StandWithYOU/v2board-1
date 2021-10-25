@@ -75,22 +75,6 @@ class OrderController extends Controller
         $total = $orderModel->count();
         $orders = $orderModel->forPage($reqCurrent, $reqPageSize)
             ->get();
-        $plans = Plan::get();
-        foreach ($orders as $order) {
-            /**
-             * @var Order $order
-             */
-            foreach ($plans as $plan) {
-                /**
-                 * @var Plan $plan
-                 */
-                $planId = $plan->getKey();
-                $orderPlanId = $order->getAttribute(Order::FIELD_PLAN_ID);
-                if ($planId == $orderPlanId) {
-                    $order->setAttribute('plan_name', $plan->getAttribute(PLan::FIELD_NAME));
-                }
-            }
-        }
         return response([
             'data' => $orders,
             'total' => $total
