@@ -14,7 +14,7 @@ CREATE TABLE `v2_failed_jobs` (
                                `exception` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
                                `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
                                PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `v2_coupon`
@@ -65,6 +65,7 @@ CREATE TABLE `v2_knowledge` (
                                 `body` text NOT NULL COMMENT '內容',
                                 `sort` int(11) DEFAULT NULL COMMENT '排序',
                                 `show` tinyint(1) NOT NULL DEFAULT '0' COMMENT '顯示',
+                                `free` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否免费',
                                 `created_at` int(11) NOT NULL COMMENT '創建時間',
                                 `updated_at` int(11) NOT NULL COMMENT '更新時間',
                                 PRIMARY KEY (`id`),

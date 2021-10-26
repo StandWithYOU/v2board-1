@@ -43,11 +43,15 @@ class Knowledge extends Model
     const FIELD_BODY = "body";
     const FIELD_SORT = "sort";
     const FIELD_SHOW = "show";
+    const FIELD_FREE = "free";
     const FIELD_CREATED_AT = "created_at";
     const FIELD_UPDATED_AT = "updated_at";
 
     const SHOW_OFF = 0;
     const SHOW_ON = 1;
+
+    const FREE_OFF = 0;
+    const FREE_ON = 1;
 
     protected $table = 'knowledge';
     protected $dateFormat = 'U';
@@ -57,4 +61,13 @@ class Knowledge extends Model
         self::FIELD_UPDATED_AT => 'timestamp'
     ];
 
+    /**
+     * check free
+     *
+     * @return bool
+     */
+    public function isFree(): bool
+    {
+        return $this->getAttribute(self::FIELD_FREE) === self::FREE_ON;
+    }
 }

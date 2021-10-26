@@ -6,6 +6,7 @@ use App\Http\Requests\Admin\KnowledgeSave;
 use App\Http\Requests\Admin\KnowledgeSort;
 use App\Models\Knowledge;
 use Exception;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -42,18 +43,14 @@ class KnowledgeController extends Controller
     /**
      * get category
      *
-     *
-     * @param Request $request
      * @return ResponseFactory|Response
      */
-    public function category(Request $request)
+    public function category()
     {
         return response([
             'data' => array_keys(Knowledge::get()->groupBy(Knowledge::FIELD_CATEGORY)->toArray())
         ]);
     }
-
-
 
     /**
      * save
@@ -123,6 +120,41 @@ class KnowledgeController extends Controller
         return response([
             'data' => true
         ]);
+    }
+
+
+    /**
+     * free
+     *
+     * @param Request $request
+     * @return Application|ResponseFactory|Response
+     */
+    public function free(Request $request)
+    {
+        $reqId = (int)$request->input('id');
+        if ($reqId <= 0) {
+            abort(500, '参数有误');
+        }
+
+        /**
+         * @var Knowledge $knowledge
+         */
+        $knowledge = Knowledge::find($reqId);
+        if ($knowledge === null) {
+            abort(500, '知识不存在');
+        }
+
+        $knowledge->setAttribute(Knowledge::FIELD_FREE, $knowledge->getAttribute(Knowledge::FIELD_FREE) ?
+            Knowledge::FREE_OFF : Knowledge::FREE_ON);
+
+        if (!$knowledge->save()) {
+            abort(500, '保存失败');
+        }
+
+        return response([
+            'data' => true
+        ]);
+
     }
 
     /**

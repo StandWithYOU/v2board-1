@@ -100,6 +100,7 @@ class AdminRoute
             $router->get ('/knowledge/getCategory', 'Admin\\KnowledgeController@category');
             $router->post('/knowledge/save', 'Admin\\KnowledgeController@save');
             $router->post('/knowledge/show', 'Admin\\KnowledgeController@show');
+            $router->post('/knowledge/free', 'Admin\\KnowledgeController@free');
             $router->post('/knowledge/drop', 'Admin\\KnowledgeController@drop');
             $router->post('/knowledge/sort', 'Admin\\KnowledgeController@sort');
             // Payment
