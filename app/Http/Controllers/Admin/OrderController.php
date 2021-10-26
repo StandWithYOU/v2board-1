@@ -6,10 +6,10 @@ use App\Http\Requests\Admin\OrderAssign;
 use App\Http\Requests\Admin\OrderUpdate;
 use App\Http\Requests\Admin\OrderFetch;
 use App\Models\Exceptions\OrderException;
-use App\Services\OrderService;
 use App\Utils\Helper;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
@@ -27,9 +27,9 @@ class OrderController extends Controller
      * _filter
      *
      * @param Request $request
-     * @param $builder
+     * @param Builder $builder
      */
-    private function _filter(Request $request, $builder)
+    private function _filter(Request $request, Builder $builder)
     {
         $reqFilter = (array)$request->input('filter');
         foreach ($reqFilter as $filter) {
