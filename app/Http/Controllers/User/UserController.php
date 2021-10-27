@@ -129,7 +129,8 @@ class UserController extends Controller
         $stat = [
             $user->countUnpaidOrders(),
             $user->countUnprocessedTickets(),
-            $user->countInvitedUsers()
+            $user->countInvitedUsers(),
+            $user->countUnusedInvitePackages(),
         ];
 
         return response([

@@ -65,7 +65,7 @@ class KnowledgeController extends Controller
             $knowledge->setAttribute(Knowledge::FIELD_BODY, $knowBody);
             $data = $knowledge;
         } else {
-            $data = Knowledge::select([Knowledge::FIELD_ID, Knowledge::FIELD_CATEGORY, Knowledge::FIELD_FREE, Knowledge::FIELD_TITLE, Knowledge::FIELD_UPDATED_AT])
+            $data = Knowledge::select([Knowledge::FIELD_ID, Knowledge::FIELD_CATEGORY, Knowledge::FIELD_TITLE, Knowledge::FIELD_UPDATED_AT])
                 ->where(Knowledge::FIELD_LANGUAGE, $request->input(Knowledge::FIELD_LANGUAGE))
                 ->where(Knowledge::FIELD_SHOW, Knowledge::SHOW_ON)
                 ->orderBy(Knowledge::FIELD_SORT, "ASC")

@@ -19,6 +19,7 @@ class PlanController extends Controller
     public function fetch(Request $request)
     {
         $reqId = (int)$request->input("id");
+        $reqDisplayAll = (bool)$request->input('display_all');
 
         if ($reqId > 0) {
             $plan = Plan::find($reqId);
@@ -27,7 +28,11 @@ class PlanController extends Controller
             }
             $data = $plan;
         } else {
-            $data = Plan::getShowPlans();
+            if ($reqDisplayAll) {
+                $data = Plan::all();
+            } else {
+                $data = Plan::getShowPlans();
+            }
         }
 
         return response([

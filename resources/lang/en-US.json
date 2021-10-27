@@ -84,5 +84,9 @@
     "Email format is incorrect": "Email format is incorrect",
     "Password can not be empty": "Password can not be empty",
     "The traffic usage in :app_name has reached 80%": "The traffic usage in :app has reached 80%",
-    "The service in :app_name is about to expire": "The service in :app_name is about to expire"
+    "The service in :app_name is about to expire": "The service in :app_name is about to expire",
+    "Invite package does not exist": "Invite package does not exist",
+    "Cannot use this package": "Cannot use this package",
+    "The package has been used": "The package has been used",
+    "The package is invalid": "The package is invalid"
 }

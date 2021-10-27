@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Passport\AuthRegister;
 use App\Http\Requests\Passport\AuthForget;
 use App\Http\Requests\Passport\AuthLogin;
+use App\Models\InvitePackage;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\JsonResponse;
@@ -133,6 +134,29 @@ class AuthController extends Controller
 
         if (!$user->save()) {
             abort(500, __('Register failed'));
+        }
+
+        //invite plan
+        $inviteUserId = $user->getAttribute(User::FIELD_INVITE_USER_ID);
+        $configPackagePlanId = (int)config('v2board.package_plan_id', 0);
+        if ($configPackagePlanId > 0 && $inviteUserId > 0) {
+
+            $configPackageCycle =  config('v2board.package_cycle', 'onetime_price');
+            $configPackageLimit =  (int)config('v2board.package_limit', 3);
+            $configPackageRecoveryEnable =  (boolean)config('v2board.package_recovery_enable', 0);
+            $availableInvitePackageNumber = $user->calAvailableNumberWithInvitePackages($configPackageLimit,
+                $configPackageRecoveryEnable);
+            if ($availableInvitePackageNumber > 0) {
+                $invitePackage = new InvitePackage();
+                $invitePackage->setAttribute(InvitePackage::FIELD_STATUS, InvitePackage::STATUS_UNUSED);
+                $invitePackage->setAttribute(InvitePackage::FIELD_USER_ID, $inviteUserId);
+                $invitePackage->setAttribute(InvitePackage::FIELD_FROM_USER_ID, $user->getKey());
+                $invitePackage->setAttribute(InvitePackage::FIELD_PLAN_ID, $configPackagePlanId);
+                $invitePackage->setAttribute(InvitePackage::FIELD_PLAN_CYCLE, $configPackageCycle);
+                if (!$invitePackage->save()) {
+                    abort(500, __('Save failed'));
+                }
+            }
         }
 
         if ((int)config('v2board.email_verify', 0)) {

@@ -25,6 +25,10 @@ class ConfigSave extends FormRequest
             'commission_withdraw_limit' => 'nullable|numeric',
             'commission_withdraw_method' => 'nullable|array',
             'withdraw_close_enable' => 'in:0,1',
+            'package_plan_id' => 'integer',
+            'package_cycle' => 'in:onetime_price,reset_price,month_price,quarter_price,half_year_price,year_price,two_year_price,three_year_price',
+            'package_limit' => 'integer|min:1',
+            'package_recovery_enable' => 'in:0,1',
             // site
             'stop_register' => 'in:0,1',
             'email_verify' => 'in:0,1',
@@ -46,7 +50,7 @@ class ConfigSave extends FormRequest
             'plan_change_enable' => 'in:0,1',
             'reset_traffic_method' => 'in:0,1',
             'surplus_enable' => 'in:0,1',
-
+            'reset_onetime_traffic_enable' => 'in:0,1',
             // server
             'server_token' => 'nullable|min:16',
             'server_license' => 'nullable',
@@ -92,7 +96,7 @@ class ConfigSave extends FormRequest
             'app_url.url' => '站点URL格式不正确，必须携带http(s)://',
             'subscribe_url.url' => '订阅URL格式不正确，必须携带http(s)://',
             'server_token.min' => '通讯密钥长度必须大于16位',
-            'tos_url.url' => '服务条款URL格式不正确'
+            'tos_url.url' => '服务条款URL格式不正确',
         ];
     }
 }

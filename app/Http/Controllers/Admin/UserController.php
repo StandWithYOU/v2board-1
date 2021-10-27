@@ -11,7 +11,6 @@ use App\Utils\Helper;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -50,9 +49,9 @@ class UserController extends Controller
      * _filter
      *
      * @param Request $request
-     * @param Builder $builder
+     * @param User $builder
      */
-    private function _filter(Request $request, Builder $builder)
+    private function _filter(Request $request, $builder)
     {
         $reqFilter = (array)$request->input('filter');
         foreach ($reqFilter as $filter) {
@@ -67,14 +66,23 @@ class UserController extends Controller
                 $builder->where(User::FIELD_INVITE_USER_ID, $user->getKey());
                 continue;
             }
+
+            if ($filter['condition'] === 'in') {
+                $filter['value'] = explode( ',', $filter['value']);
+                $builder->whereIn($filter['key'], $filter['value']);
+                continue;
+            }
+
             if ($filter['key'] === User::FIELD_D || $filter['key'] === User::FIELD_TRANSFER_ENABLE) {
                 $filter['value'] = $filter['value'] * 1073741824;
             }
+
             //兼容
             if ($filter['condition'] === '模糊' || $filter['condition'] === 'like') {
                 $filter['condition'] = 'like';
                 $filter['value'] = "%{$filter['value']}%";
             }
+
             $builder->where($filter['key'], $filter['condition'], $filter['value']);
         }
 

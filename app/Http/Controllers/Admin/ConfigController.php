@@ -59,7 +59,11 @@ class ConfigController extends Controller
                     'commission_auto_check_enable' => config('v2board.commission_auto_check_enable', 1),
                     'commission_withdraw_limit' => config('v2board.commission_withdraw_limit', 100),
                     'commission_withdraw_method' => config('v2board.commission_withdraw_method', Dict::WITHDRAW_METHOD_WHITELIST_DEFAULT),
-                    'withdraw_close_enable' => config('v2board.withdraw_close_enable', 0)
+                    'withdraw_close_enable' => config('v2board.withdraw_close_enable', 0),
+                    'package_plan_id' => config('v2board.package_plan_id', 0),
+                    'package_cycle' => config('v2board.package_cycle', 'onetime_price'),
+                    'package_limit' => config('v2board.package_limit', 3),
+                    'package_recovery_enable' => config('v2board.package_recovery_enable', 1),
                 ],
                 'site' => [
                     'safe_mode_enable' => (int)config('v2board.safe_mode_enable', 0),
@@ -83,6 +87,7 @@ class ConfigController extends Controller
                     'plan_change_enable' => (int)config('v2board.plan_change_enable', 1),
                     'reset_traffic_method' => (int)config('v2board.reset_traffic_method', 0),
                     'surplus_enable' => (int)config('v2board.surplus_enable', 1),
+                    'reset_onetime_traffic_enable' => (int)config('v2board.reset_onetime_traffic_enable', 1),
                 ],
                 'frontend' => [
                     'frontend_theme_sidebar' => config('v2board.frontend_theme_sidebar', 'light'),
