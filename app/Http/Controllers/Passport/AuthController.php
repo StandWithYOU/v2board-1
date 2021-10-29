@@ -19,6 +19,7 @@ use App\Models\InviteCode;
 use App\Utils\Helper;
 use App\Utils\Dict;
 use App\Utils\CacheKey;
+use Illuminate\Support\Facades\DB;
 use ReCaptcha\ReCaptcha;
 
 class AuthController extends Controller
@@ -83,6 +84,8 @@ class AuthController extends Controller
             abort(500, __('Email already exists'));
         }
 
+
+        DB::beginTransaction();
         $user = new User();
         $user->setAttribute(User::FIELD_EMAIL, $reqEmail);
         $user->setAttribute(User::FIELD_PASSWORD, password_hash($reqPassword, PASSWORD_DEFAULT));
@@ -107,6 +110,7 @@ class AuthController extends Controller
                 if (!(int)config('v2board.invite_never_expire', 0)) {
                     $inviteCode->setAttribute(InviteCode::FIELD_STATUS, InviteCode::STATUS_USED);
                     if (!$inviteCode->save()) {
+                        DB::rollBack();
                         abort(500, __('Save failed'));
                     }
                 }
@@ -133,6 +137,7 @@ class AuthController extends Controller
         }
 
         if (!$user->save()) {
+            DB::rollBack();
             abort(500, __('Register failed'));
         }
 
@@ -140,24 +145,37 @@ class AuthController extends Controller
         $inviteUserId = $user->getAttribute(User::FIELD_INVITE_USER_ID);
         $configPackagePlanId = (int)config('v2board.package_plan_id', 0);
         if ($configPackagePlanId > 0 && $inviteUserId > 0) {
+            $packagePlan = Plan::find($configPackagePlanId);
+            $inviteUser =  User::find($inviteUserId);
 
-            $configPackageCycle =  config('v2board.package_cycle', 'onetime_price');
-            $configPackageLimit =  (int)config('v2board.package_limit', 3);
-            $configPackageRecoveryEnable =  (boolean)config('v2board.package_recovery_enable', 0);
-            $availableInvitePackageNumber = $user->calAvailableNumberWithInvitePackages($configPackageLimit,
-                $configPackageRecoveryEnable);
-            if ($availableInvitePackageNumber > 0) {
-                $invitePackage = new InvitePackage();
-                $invitePackage->setAttribute(InvitePackage::FIELD_STATUS, InvitePackage::STATUS_UNUSED);
-                $invitePackage->setAttribute(InvitePackage::FIELD_USER_ID, $inviteUserId);
-                $invitePackage->setAttribute(InvitePackage::FIELD_FROM_USER_ID, $user->getKey());
-                $invitePackage->setAttribute(InvitePackage::FIELD_PLAN_ID, $configPackagePlanId);
-                $invitePackage->setAttribute(InvitePackage::FIELD_PLAN_CYCLE, $configPackageCycle);
-                if (!$invitePackage->save()) {
-                    abort(500, __('Save failed'));
+            if ($packagePlan !== null || $inviteUser === null) {
+                $configPackageLimit = (int)config('v2board.package_limit', 3);
+                $configPackageRecoveryLimit = (boolean)config('v2board.package_recovery_limit', 0);
+                $availableInvitePackageNumber = $user->calAvailableNumberWithInvitePackages($configPackageLimit,
+                    $configPackageRecoveryLimit);
+
+                if ($availableInvitePackageNumber > 0) {
+                    //赠送流量
+                    $inviteUser->buyPlan($packagePlan, null,  true );
+                    if (!$inviteUser->save()) {
+                        DB::rollBack();
+                        abort(500, __('Save failed'));
+                    }
+                    //添加日志
+                    $invitePackage = new InvitePackage();
+                    $invitePackage->setAttribute(InvitePackage::FIELD_VALUE, $packagePlan->getAttribute(Plan::FIELD_TRANSFER_ENABLE));
+                    $invitePackage->setAttribute(InvitePackage::FIELD_STATUS, InvitePackage::STATUS_ACTIVATED);
+                    $invitePackage->setAttribute(InvitePackage::FIELD_USER_ID, $inviteUserId);
+                    $invitePackage->setAttribute(InvitePackage::FIELD_FROM_USER_ID, $user->getKey());
+                    if (!$invitePackage->save()) {
+                        DB::rollBack();
+                        abort(500, __('Save failed'));
+                    }
                 }
             }
         }
+
+        DB::commit();
 
         if ((int)config('v2board.email_verify', 0)) {
             Cache::forget(CacheKey::get('EMAIL_VERIFY_CODE', $request->input('email')));

@@ -56,37 +56,5 @@ class InvitePackageController extends Controller
         ]);
     }
 
-
-    /**
-     * update
-     *
-     * @param InvitePackageUpdate $request
-     * @return Application|ResponseFactory|Response
-     */
-    public function update(InvitePackageUpdate $request)
-    {
-        $reqStatus = $request->input("status");
-        $reqId = $request->input("id");
-
-        /**
-         * @var InvitePackage $invitePackage
-         */
-        $invitePackage  = InvitePackage::find($reqId);
-        if ($invitePackage === null) {
-            abort(500, '邀请礼包不存在');
-        }
-
-        if ($reqStatus !== null) {
-            $invitePackage->setAttribute(InvitePackage::FIELD_STATUS, $reqStatus);
-        }
-
-        if (!$invitePackage->save()) {
-            abort(500, '更新失败');
-        }
-
-        return response([
-            'data' => true
-        ]);
-    }
 }
 

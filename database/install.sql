@@ -420,4 +420,19 @@ CREATE TABLE `v2_user` (
                            KEY `telegram_id` (`telegram_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+DROP TABLE IF EXISTS `v2_invite_package`;
+CREATE TABLE `v2_invite_package` (
+                                     `id` int(11) NOT NULL AUTO_INCREMENT,
+                                     `user_id` int(11) NOT NULL COMMENT '用户ID',
+                                     `value` int(11) NOT NULL COMMENT '流量',
+                                     `from_user_id` int(11) NOT NULL COMMENT '被邀请人ID',
+                                     `status` tinyint(4) NOT NULL COMMENT '状态(0:未应用，1:应用）',
+                                     `created_at` int(11) DEFAULT NULL COMMENT '创建时间',
+                                     `updated_at` int(11) DEFAULT NULL COMMENT '更新时间',
+                                     PRIMARY KEY (`id`),
+                                     UNIQUE KEY `from_user_id` (`from_user_id`) USING BTREE,
+                                     KEY `user_id` (`user_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 SET FOREIGN_KEY_CHECKS = 1;

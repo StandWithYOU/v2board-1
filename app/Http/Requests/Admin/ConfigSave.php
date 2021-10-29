@@ -28,7 +28,7 @@ class ConfigSave extends FormRequest
             'package_plan_id' => 'integer',
             'package_cycle' => 'in:onetime_price,reset_price,month_price,quarter_price,half_year_price,year_price,two_year_price,three_year_price',
             'package_limit' => 'integer|min:1',
-            'package_recovery_enable' => 'in:0,1',
+            'package_recovery_limit' => 'integer|min:1',
             // site
             'stop_register' => 'in:0,1',
             'email_verify' => 'in:0,1',

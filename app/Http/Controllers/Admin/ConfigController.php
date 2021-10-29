@@ -52,7 +52,7 @@ class ConfigController extends Controller
             'data' => [
                 'invite' => [
                     'invite_force' => (int)config('v2board.invite_force', 0),
-                    'invite_commission' => config('v2board.invite_commission', 10),
+                    'invite_commission' => config('v2board.invite_commission', 0),
                     'invite_gen_limit' => config('v2board.invite_gen_limit', 5),
                     'invite_never_expire' => config('v2board.invite_never_expire', 0),
                     'commission_first_time_enable' => config('v2board.commission_first_time_enable', 1),
@@ -63,7 +63,7 @@ class ConfigController extends Controller
                     'package_plan_id' => config('v2board.package_plan_id', 0),
                     'package_cycle' => config('v2board.package_cycle', 'onetime_price'),
                     'package_limit' => config('v2board.package_limit', 3),
-                    'package_recovery_enable' => config('v2board.package_recovery_enable', 1),
+                    'package_recovery_limit' => config('v2board.package_recovery_limit', 1),
                 ],
                 'site' => [
                     'safe_mode_enable' => (int)config('v2board.safe_mode_enable', 0),

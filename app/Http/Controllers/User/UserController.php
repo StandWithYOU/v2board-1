@@ -130,7 +130,7 @@ class UserController extends Controller
             $user->countUnpaidOrders(),
             $user->countUnprocessedTickets(),
             $user->countInvitedUsers(),
-            $user->countUnusedInvitePackages(),
+            $user->countActivatedInvitePackages(),
         ];
 
         return response([

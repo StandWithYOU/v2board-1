@@ -111,4 +111,9 @@ class Helper
         }
         return $subscribeUrl;
     }
+
+    public static function hiddenEmail($email)
+    {
+        return  preg_replace("/(?!^).(?=[^@]+@)/", "*", $email);
+    }
 }

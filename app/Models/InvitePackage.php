@@ -37,15 +37,13 @@ class InvitePackage extends Model
     const FIELD_ID = "id";
     const FIELD_USER_ID = "user_id";
     const FIELD_FROM_USER_ID = 'from_user_id';
-    const FIELD_PLAN_ID = "plan_id";
-    const FIELD_PLAN_CYCLE = 'plan_cycle';
+    const FIELD_VALUE = 'value';
     const FIELD_STATUS = 'status';
     const FIELD_CREATED_AT = "created_at";
     const FIELD_UPDATED_AT = "updated_at";
 
-    const STATUS_UNUSED = 0;
-    const STATUS_USED = 1;
-    const STATUS_INVALID = -1;
+    const STATUS_NOT_ACTIVATED = 0;
+    const STATUS_ACTIVATED = 1;
 
     protected $table = 'invite_package';
     protected $dateFormat = 'U';
@@ -79,32 +77,13 @@ class InvitePackage extends Model
 
 
     /**
-     * get plan
-     *
-     * @return Model|BelongsTo|object|null
-     */
-    public function plan()
-    {
-        return $this->belongsTo('App\Models\Plan')->first();
-    }
-
-    /**
      * check package status
      *
      * @return bool
      */
-    public function isUsed(): bool
+    public function isActivated(): bool
     {
-        return $this->getAttribute(self::FIELD_STATUS) === self::STATUS_USED;
+        return $this->getAttribute(self::FIELD_STATUS) === self::STATUS_ACTIVATED;
     }
 
-    /**
-     * check package status is invalid
-     *
-     * @return bool
-     */
-    public function isInvalid(): bool
-    {
-        return $this->getAttribute(self::FIELD_STATUS) === self::STATUS_INVALID;
-    }
 }

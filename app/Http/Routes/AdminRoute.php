@@ -110,7 +110,6 @@ class AdminRoute
             $router->post('/payment/drop', 'Admin\\PaymentController@drop');
             // Invite Package
             $router->get('/invite-package/fetch', 'Admin\\InvitePackageController@fetch');
-            $router->post('/invite-package/update', 'Admin\\InvitePackageController@update');
 
         });
     }

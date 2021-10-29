@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Traits\Serialize;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Models\Traits\Serialize;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 use Throwable;
@@ -98,6 +98,7 @@ use Throwable;
 class User extends Model
 {
     use Serialize;
+
     const FIELD_ID = "id";
     const FIELD_INVITE_USER_ID = "invite_user_id";
     const FIELD_TELEGRAM_ID = "telegram_id";
@@ -163,7 +164,7 @@ class User extends Model
      */
     public function orders(): HasMany
     {
-        return  $this->hasMany('App\Models\Order', Order::FIELD_USER_ID);
+        return $this->hasMany('App\Models\Order', Order::FIELD_USER_ID);
     }
 
 
@@ -197,6 +198,18 @@ class User extends Model
         return $this->hasMany('App\Models\InviteCode', InviteCode::FIELD_USER_ID);
     }
 
+
+    /**
+     * get invite packages
+     *
+     * @return HasMany
+     */
+    public function invitePackages(): hasMany
+    {
+        return $this->hasMany('App\Models\InvitePackage', InvitePackage::FIELD_USER_ID);
+    }
+
+
     /**
      * get server logs
      *
@@ -205,6 +218,40 @@ class User extends Model
     public function serverLogs(): HasMany
     {
         return $this->hasMany('App\Models\ServerLog', ServerLog::FIELD_USER_ID);
+    }
+
+    /**
+     * count invite packages
+     *
+     * @return int
+     */
+    public function countInvitePackages(): int
+    {
+        return $this->hasMany('App\Models\InvitePackage', InvitePackage::FIELD_USER_ID)->count();
+    }
+
+
+    /**
+     * count activated invite packages
+     *
+     * @return int
+     */
+    public function countActivatedInvitePackages(): int
+    {
+        return $this->hasMany('App\Models\InvitePackage', InvitePackage::FIELD_USER_ID)->
+        where(InvitePackage::FIELD_STATUS, InvitePackage::STATUS_ACTIVATED)->count();
+    }
+
+
+    /**
+     * sum activated invite packages values
+     *
+     * @return  int
+     */
+    public function sumActivatedInvitePackagesValues(): int
+    {
+        return $this->hasMany('App\Models\InvitePackage', InvitePackage::FIELD_USER_ID)->
+        where(InvitePackage::FIELD_STATUS, InvitePackage::STATUS_ACTIVATED)->sum(InvitePackage::FIELD_VALUE);
     }
 
 
@@ -220,6 +267,23 @@ class User extends Model
     }
 
 
+    /**
+     * Calculate the effective quantity with invite packages
+     *
+     * @param int $limit
+     * @param int $recoveryLimit
+     *
+     * @return int
+     */
+    public function calAvailableNumberWithInvitePackages(int $limit, int $recoveryLimit): int
+    {
+        $total = $limit;
+        if ($recoveryLimit > 0) {
+            $total = $total + ($this->countPaidInviteUsers() * $recoveryLimit);
+        }
+        $total = $total - $this->countInvitePackages();
+        return $total >= 0 ? $total : 0;
+    }
 
     /**
      * check available
@@ -297,9 +361,40 @@ class User extends Model
     public function countValidOrders(): int
     {
         return Order::where(Order::FIELD_USER_ID, $this->getKey())
-            ->whereNotIn('status', [Order::STATUS_UNPAID, Order::STATUS_CANCELLED])
+            ->whereNotIn(Order::FIELD_STATUS, [Order::STATUS_UNPAID, Order::STATUS_CANCELLED])
             ->count();
     }
+
+    /**
+     * count income orders
+     *
+     * @return int
+     */
+    public function countIncomeOrders(): int
+    {
+        return Order::where(Order::FIELD_USER_ID, $this->getKey())
+            ->where(Order::FIELD_TOTAL_AMOUNT, '>', 0)
+            ->whereIn(Order::FIELD_STATUS, [Order::STATUS_COMPLETED])
+            ->count();
+    }
+
+    /**
+     * count paid invite users
+     *
+     * @return int
+     */
+    public function countPaidInviteUsers(): int
+    {
+        $total = 0;
+        $inviteUsers = User::where(User::FIELD_INVITE_USER_ID, $this->getKey())->get()->all();
+        foreach ($inviteUsers as $inviteUser) {
+            if ($inviteUser->countIncomeOrders() > 0) {
+                $total = $total + 1;
+            }
+        }
+        return $total;
+    }
+
 
     /**
      * count invite users
@@ -371,6 +466,7 @@ class User extends Model
 
     }
 
+
     /**
      * reset traffic
      *
@@ -387,11 +483,17 @@ class User extends Model
      *
      * @param Plan $plan
      * @param int|null $expiredAt
+     * @param bool $increment
+     *
      * @return void
      */
-    public function buyPlan(Plan $plan, int $expiredAt = null)
+    public function buyPlan(Plan $plan, int $expiredAt = null, bool $increment = false)
     {
-        $this->setAttribute(User::FIELD_TRANSFER_ENABLE, $plan->getAttribute(Plan::FIELD_TRANSFER_ENABLE) * 1073741824);
+        if ($increment) {
+            $this->increment(User::FIELD_TRANSFER_ENABLE, $plan->getAttribute(Plan::FIELD_TRANSFER_ENABLE) * 1073741824);
+        } else {
+            $this->setAttribute(User::FIELD_TRANSFER_ENABLE, $plan->getAttribute(Plan::FIELD_TRANSFER_ENABLE) * 1073741824);
+        }
         $this->setAttribute(User::FIELD_PLAN_ID, $plan->getAttribute(Plan::FIELD_ID));
         $this->setAttribute(User::FIELD_GROUP_ID, $plan->getAttribute(Plan::FIELD_GROUP_ID));
         $this->setAttribute(User::FIELD_EXPIRED_AT, $expiredAt);
@@ -523,6 +625,7 @@ class User extends Model
             $this->inviteCodes()->delete();
             $this->ticketMessages()->delete();
             $this->serverLogs()->delete();
+            $this->invitePackages()->delete();
             $this->delete();
         } catch (Exception $e) {
             DB::rollBack();
@@ -586,7 +689,7 @@ class User extends Model
      */
     public static function countEffectivePlanUsers($planId): int
     {
-        return self::where(self::FIELD_PLAN_ID, $planId)->where(function($query) {
+        return self::where(self::FIELD_PLAN_ID, $planId)->where(function ($query) {
             $query->orWhere(self::FIELD_EXPIRED_AT, NULL)->orWhere(self::FIELD_EXPIRED_AT, '>=', time());
         })->count();
     }
