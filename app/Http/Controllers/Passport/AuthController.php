@@ -9,6 +9,7 @@ use App\Http\Requests\Passport\AuthLogin;
 use App\Models\InvitePackage;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -172,6 +173,19 @@ class AuthController extends Controller
                         abort(500, __('Save failed'));
                     }
                 }
+            }
+        }
+
+        //自动生成一个邀请码
+        $inviteCodesCount = $user->countUnusedInviteCodes();
+        $inviteGenLimit = config('v2board.invite_gen_limit', 5);
+        if ($inviteCodesCount < $inviteGenLimit) {
+            $inviteCode = new InviteCode();
+            $inviteCode->setAttribute(InviteCode::FIELD_USER_ID, $user->getKey());
+            $inviteCode->setAttribute(InviteCode::FIELD_CODE, Helper::randomChar(8));
+            if (!$inviteCode->save()) {
+                DB::rollBack();
+                abort(500, __('Save failed'));
             }
         }
 

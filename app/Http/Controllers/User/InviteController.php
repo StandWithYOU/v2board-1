@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\InviteCode;
 use App\Models\InvitePackage;
+use App\Models\Order;
+use App\Models\Plan;
+use App\Models\User;
+use App\Utils\Helper;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
-use App\Models\User;
-use App\Models\Order;
-use App\Models\InviteCode;
-use App\Models\Plan;
-use App\Utils\Helper;
 use Illuminate\Http\Response;
 
 
@@ -88,8 +88,8 @@ class InviteController extends Controller
         }
 
         $unUsedCodes = $user->getUnusedInviteCodes();
-        $defaultPackagePlanId =  (int)config('v2board.package_plan_id', 0);
-        $defaultPackageLimit =  (int)config('v2board.package_limit', 3);
+        $defaultPackagePlanId = (int)config('v2board.package_plan_id', 0);
+        $defaultPackageLimit = (int)config('v2board.package_limit', 3);
         $defaultPackageRecoveryLimit = (int)config('v2board.package_recovery_enable', 1);
 
         $defaultPlan = Plan::find($defaultPackagePlanId);
@@ -116,6 +116,33 @@ class InviteController extends Controller
 
 
     /**
+     * stats
+     *
+     * @param Request $request
+     * @return ResponseFactory|Response
+     */
+    public function stats(Request $request)
+    {
+        $sessionId = $request->session()->get('id');
+        /**
+         * @var User $user
+         */
+        $user = User::find($sessionId);
+        if ($user === null) {
+            abort(500, __('The user does not exist'));
+        }
+
+        return response([
+            'data' => [
+                'invite_users' => $user->countInvitedUsers(),
+                'total_values' => $user->sumActivatedInvitePackagesValues(),
+                'invite_code' => $user->getUnusedInviteCode() ? $user->getUnusedInviteCode()->getAttribute(InviteCode::FIELD_CODE) :null
+            ]
+        ]);
+    }
+
+
+    /**
      * 获取礼包列表
      *
      * @param Request $request
@@ -128,7 +155,7 @@ class InviteController extends Controller
          * @var User $user
          */
         $user = User::find($sessionId);
-        if ($user ===  null) {
+        if ($user === null) {
             abort(500, __('The user does not exist'));
         }
 
@@ -138,9 +165,9 @@ class InviteController extends Controller
             /**
              * @var InvitePackage $package
              */
-            $fromUser =  $package->fromUser();
+            $fromUser = $package->fromUser();
             if ($fromUser !== null) {
-                $package['from_user_email']  = Helper::hiddenEmail($fromUser->getAttribute(User::FIELD_EMAIL));
+                $package['from_user_email'] = Helper::hiddenEmail($fromUser->getAttribute(User::FIELD_EMAIL));
             }
         }
 

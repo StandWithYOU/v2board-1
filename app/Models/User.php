@@ -268,6 +268,18 @@ class User extends Model
 
 
     /**
+     * get one of unused invite code
+     *
+     * @return InviteCode|Builder|Model|object|null
+     */
+    public function getUnusedInviteCode()
+    {
+        return InviteCode::where(InviteCode::FIELD_USER_ID, $this->getKey())->
+        where(InviteCode::FIELD_STATUS, InviteCode::STATUS_UNUSED)->first();
+    }
+
+
+    /**
      * Calculate the effective quantity with invite packages
      *
      * @param int $limit

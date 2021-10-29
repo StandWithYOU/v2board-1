@@ -37,6 +37,7 @@ class UserRoute
             $router->get ('/invite/fetch', 'User\\InviteController@fetch');
             $router->get ('/invite/details', 'User\\InviteController@details');
             $router->get ('/invite/packages', 'User\\InviteController@packages');
+            $router->get ('/invite/stats', 'User\\InviteController@stats');
 
             // Notice
             $router->get ('/notice/fetch', 'User\\NoticeController@fetch');
