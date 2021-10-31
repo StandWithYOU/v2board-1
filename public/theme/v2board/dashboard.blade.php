@@ -67,7 +67,7 @@
 <script src="/theme/{{$theme}}/assets//compoments.js?v={{$version}}"></script>
 <script src="/theme/{{$theme}}/assets//umi.js?v={{$version}}"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-C3WVW4M3Z5"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1W24BJHQKC"></script>
 <script>
     window.dataLayer = window.dataLayer || [];
 
@@ -77,7 +77,7 @@
 
     gtag('js', new Date());
 
-    gtag('config', 'G-C3WVW4M3Z5');
+    gtag('config', 'G-1W24BJHQKC');
 </script>
 </body>
 
