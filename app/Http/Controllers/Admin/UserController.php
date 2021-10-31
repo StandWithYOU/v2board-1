@@ -204,7 +204,7 @@ class UserController extends Controller
         }
 
         if ($reqPassword) {
-            $user->setAttribute(User::FIELD_PASSWORD, password_hash($reqPassword, PASSWORD_DEFAULT));
+            $user->setAttribute(User::FIELD_PASSWORD, password_hash($reqPassword, PASSWORD_ARGON2ID));
             $user->setAttribute(User::FIELD_PASSWORD_ALGO, null);
         }
 
@@ -399,7 +399,7 @@ class UserController extends Controller
         $user->setAttribute(User::FIELD_UUID, Helper::guid(true));
         $user->setAttribute(User::FIELD_TOKEN, Helper::guid());
         $user->setAttribute(User::FIELD_PASSWORD, password_hash($reqPassword ??
-            $user->getAttribute(User::FIELD_EMAIL), PASSWORD_DEFAULT));
+            $user->getAttribute(User::FIELD_EMAIL), PASSWORD_ARGON2ID));
         if (!$user->save()) {
             abort(500, '生成失败');
         }
@@ -445,7 +445,7 @@ class UserController extends Controller
             $user->setAttribute(User::FIELD_EXPIRED_AT, $reqExpiredAt ?: null);
             $user->setAttribute(User::FIELD_UUID, Helper::guid(true));
             $user->setAttribute(User::FIELD_TOKEN, Helper::guid());
-            $user->setAttribute(User::FIELD_PASSWORD, password_hash($reqPassword ?? $user->getAttribute(User::FIELD_EMAIL), PASSWORD_DEFAULT));
+            $user->setAttribute(User::FIELD_PASSWORD, password_hash($reqPassword ?? $user->getAttribute(User::FIELD_EMAIL), PASSWORD_ARGON2ID));
             $user->setAttribute(User::FIELD_CREATED_AT, time());
             $user->setAttribute(User::FIELD_UPDATED_AT, time());
             if (!$user->save()) {

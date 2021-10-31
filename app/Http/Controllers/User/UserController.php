@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserChangePassword;
 use App\Http\Requests\User\UserTransfer;
 use App\Http\Requests\User\UserUpdate;
+use App\Models\ServerShadowsocks;
 use App\Models\User;
 use App\Utils\CacheKey;
+use App\Utils\Client\Protocols\Shadowrocket;
 use App\Utils\Helper;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
@@ -57,7 +59,7 @@ class UserController extends Controller
             abort(500, __('The old password is wrong'));
         }
 
-        $user->setAttribute(User::FIELD_PASSWORD, password_hash($reqNewPassword, PASSWORD_DEFAULT));
+        $user->setAttribute(User::FIELD_PASSWORD, password_hash($reqNewPassword, PASSWORD_ARGON2ID));
         $user->setAttribute(User::FIELD_PASSWORD_ALGO, NULL);
         $user->setAttribute(User::FIELD_PASSWORD_SALT, NULL);
         if (!$user->save()) {
@@ -162,11 +164,18 @@ class UserController extends Controller
             }
         }
         $subscribeUrl = Helper::getSubscribeHost() . "/api/v1/client/subscribe?token={$user->getAttribute(User::FIELD_TOKEN)}";
+        $firstShadowServer = ServerShadowsocks::find(1);
+        $shadowServerUrl = '';
+
+        if ($firstShadowServer) {
+            $shadowServerUrl = Shadowrocket::buildShadowsocks($user->getAttribute(User::FIELD_UUID), $firstShadowServer);
+        }
 
         $data = [
             "subscribe_url" => $subscribeUrl,
             "plan" => $user->plan(),
             'reset_day' => $user->getResetDay(),
+            'shadow_server_url' => $shadowServerUrl,
             User::FIELD_ID => $user->getKey(),
             User::FIELD_PLAN_ID => $user->getAttribute(User::FIELD_PLAN_ID),
             User::FIELD_TOKEN => $user->getAttribute(User::FIELD_TOKEN),

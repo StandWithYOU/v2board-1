@@ -48,7 +48,7 @@
 <script src="/assets/admin/umi.js?v={{$version}}"></script>
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-6ZV4J6SYM3"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1W24BJHQKC"></script>
 
 <script>
     window.dataLayer = window.dataLayer || [];
@@ -58,7 +58,7 @@
     }
 
     gtag('js', new Date());
-    gtag('config', 'G-6ZV4J6SYM3');
+    gtag('config', 'G-1W24BJHQKC');
 </script>
 </body>
 </html>
