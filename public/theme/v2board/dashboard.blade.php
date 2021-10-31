@@ -21,10 +21,6 @@
         sizes="180x180"
         href="/theme/{{$theme}}/assets/favicons/apple-touch-icon-180x180.png"
     />
-    <link
-        rel="stylesheet"
-        href="https://fonts.lug.ustc.edu.cn/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
-    />
     <link rel="stylesheet" href="/theme/{{$theme}}/assets/vendors.chunk.css?v={{$version}}"/>
     <link rel="stylesheet" href="/theme/{{$theme}}/assets/compoments.chunk.css?v={{$version}}"/>
 
