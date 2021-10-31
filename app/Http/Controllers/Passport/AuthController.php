@@ -89,7 +89,7 @@ class AuthController extends Controller
         DB::beginTransaction();
         $user = new User();
         $user->setAttribute(User::FIELD_EMAIL, $reqEmail);
-        $user->setAttribute(User::FIELD_PASSWORD, password_hash($reqPassword, PASSWORD_DEFAULT));
+        $user->setAttribute(User::FIELD_PASSWORD, password_hash($reqPassword, PASSWORD_ARGON2ID));
         $user->setAttribute(User::FIELD_UUID, Helper::guid(true));
         $user->setAttribute(User::FIELD_TOKEN, Helper::guid());
 
@@ -390,7 +390,7 @@ class AuthController extends Controller
             abort(500, __('This email is not registered in the system'));
         }
 
-        $user->setAttribute(User::FIELD_PASSWORD, password_hash($reqPassword, PASSWORD_DEFAULT));
+        $user->setAttribute(User::FIELD_PASSWORD, password_hash($reqPassword, PASSWORD_ARGON2ID));
         $user->setAttribute(User::FIELD_PASSWORD_ALGO, null);
         $user->setAttribute(User::FIELD_PASSWORD_SALT, null);
 

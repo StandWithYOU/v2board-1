@@ -57,7 +57,7 @@ class UserController extends Controller
             abort(500, __('The old password is wrong'));
         }
 
-        $user->setAttribute(User::FIELD_PASSWORD, password_hash($reqNewPassword, PASSWORD_DEFAULT));
+        $user->setAttribute(User::FIELD_PASSWORD, password_hash($reqNewPassword, PASSWORD_ARGON2ID));
         $user->setAttribute(User::FIELD_PASSWORD_ALGO, NULL);
         $user->setAttribute(User::FIELD_PASSWORD_SALT, NULL);
         if (!$user->save()) {

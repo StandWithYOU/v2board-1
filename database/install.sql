@@ -382,7 +382,7 @@ CREATE TABLE `v2_user` (
                            `invite_user_id` int(11) DEFAULT '0',
                            `telegram_id` bigint(20) DEFAULT '0',
                            `email` varchar(64) NOT NULL,
-                           `password` varchar(64) NOT NULL,
+                           `password` varchar(128) NOT NULL,
                            `password_algo` char(10) DEFAULT NULL,
                            `password_salt` char(10) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
                            `balance` int(11) DEFAULT '0',
