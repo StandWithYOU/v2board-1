@@ -88,5 +88,6 @@
     "Invite package does not exist": "Invite package does not exist",
     "Cannot use this package": "Cannot use this package",
     "The package has been used": "The package has been used",
-    "The package is invalid": "The package is invalid"
+    "The package is invalid": "The package is invalid",
+    "No permission to view": "No permission to view"
 }
