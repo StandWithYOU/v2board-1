@@ -57,7 +57,6 @@ class ServerLogJob implements ShouldQueue
             ->where(ServerLog::FIELD_USER_ID, $this->userId)
             ->where(ServerLog::FIELD_RATE, $this->rate)
             ->where(ServerLog::FIELD_METHOD, $this->protocol)
-            ->lockForUpdate()
             ->first();
 
         if ($serverLog !== null) {
