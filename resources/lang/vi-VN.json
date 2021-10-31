@@ -85,8 +85,5 @@
     "Password can not be empty": "Mật khẩu không được để trống",
     "The traffic usage in :app_name has reached 80%": "Lưu lượng sử dụng trong :app đã đạt 80%",
     "The service in :app_name is about to expire": "Gói dịch vụ :app_name sắp hết hạn sử dụng",
-    "Invite package does not exist": "Gói lời mời không tồn tại",
-    "Cannot use this package": "Không thể sử dụng gói này",
-    "The package has been used": "Gói đã được sử dụng",
-    "The package is invalid": "Gói không hợp lệ"
+    "No permission to view": "No permission to view"
 }
