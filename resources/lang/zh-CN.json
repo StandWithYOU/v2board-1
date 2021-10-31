@@ -88,5 +88,6 @@
     "Invite package does not exist": "邀请礼包不存在",
     "Cannot use this package": "不能使用该礼包",
     "The package has been used": "该礼包已经使用",
-    "The package is invalid": "该礼包无效"
+    "The package is invalid": "该礼包无效",
+    "No permission to view": "没有权限查看"
 }

@@ -21,8 +21,8 @@ class KnowledgeController extends Controller
     {
         $reqId = (int)$request->input(['id']);
         $sessionId = $request->session()->get('id');
-
         if ($reqId > 0) {
+
 
             /**
              * @var Knowledge $knowledge
@@ -38,6 +38,11 @@ class KnowledgeController extends Controller
             $user = User::find($sessionId);
             if ($user === null) {
                 abort(500, __('The user does not exist'));
+            }
+
+            if (!$knowledge->isFree() && (int)$user->getAttribute(User::FIELD_PLAN_ID) === 0) {
+                abort(500, __('No permission to view'));
+
             }
 
             $knowBody = $knowledge->getAttribute(Knowledge::FIELD_BODY);
