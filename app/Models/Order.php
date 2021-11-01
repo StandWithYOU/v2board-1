@@ -498,15 +498,19 @@ class Order extends Model
         $couponType = $coupon->getAttribute(Coupon::FIELD_TYPE);
         $couponValue = $coupon->getAttribute(Coupon::FIELD_VALUE);
         $couponLimitUse = $coupon->getAttribute(Coupon::FIELD_LIMIT_USE);
+        $totalAmount = $this->getAttribute(Order::FIELD_TOTAL_AMOUNT);
 
         switch ($couponType) {
             case 1:
                 $this->setAttribute(Order::FIELD_DISCOUNT_AMOUNT, $couponValue);
                 break;
             case 2:
-                $totalAmount = $this->getAttribute(Order::FIELD_TOTAL_AMOUNT);
                 $this->setAttribute(Order::FIELD_DISCOUNT_AMOUNT, $totalAmount * ($couponValue / 100));
                 break;
+        }
+
+        if ($this->getAttribute(Order::FIELD_DISCOUNT_AMOUNT) > $totalAmount) {
+            $this->setAttribute(Order::FIELD_DISCOUNT_AMOUNT, $totalAmount);
         }
 
         if ($couponLimitUse > 0) {

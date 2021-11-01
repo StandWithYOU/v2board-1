@@ -88,6 +88,6 @@
     "Invite package does not exist": "Gói lời mời không tồn tại",
     "Cannot use this package": "Không thể sử dụng gói này",
     "The package has been used": "Gói đã được sử dụng",
-    "The package is invalid": "Gói không hợp lệ"
-    "No permission to view": "No permission to view"
+    "The package is invalid": "Gói không hợp lệ",
+    "No permission to view": "Không có quyền để xem"
 }
