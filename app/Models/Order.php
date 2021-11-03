@@ -17,7 +17,6 @@ use Throwable;
 /**
  * App\Models\Order
  *
- * @property mixed created_at
  * @property int $id
  * @property int|null $invite_user_id
  * @property int $user_id
@@ -39,6 +38,7 @@ use Throwable;
  * @property int $commission_balance
  * @property int|null $paid_at
  * @property int $updated_at
+ * @property int created_at
  * @method static Builder|Order newModelQuery()
  * @method static Builder|Order newQuery()
  * @method static Builder|Order query()
@@ -556,10 +556,14 @@ class Order extends Model
 
 
     /**
+     * open order
+     *
+     * @param boolean $resetOneTimeTrafficEnable
+     *
      * @throws OrderException
      * @throws Throwable
      */
-    public function open() : bool
+    public function open(bool $resetOneTimeTrafficEnable) : bool
     {
         DB::beginTransaction();
         /**
@@ -594,19 +598,22 @@ class Order extends Model
             }
         }
 
+        $orderType = $this->getAttribute(Order::FIELD_TYPE);
         $orderCycle = $this->getAttribute(Order::FIELD_CYCLE);
+        $userExpiredAt = $user->getAttribute(User::FIELD_EXPIRED_AT);
         switch ($orderCycle) {
             case Order::CYCLE_ONETIME:
-                $user->resetTraffic();
-                $user->buyPlan($plan);
+                if ($resetOneTimeTrafficEnable || $userExpiredAt !== null) {
+                    $user->resetTraffic();
+                    $user->buyPlan($plan);
+                } else {
+                    $user->buyPlan($plan, null,  true );
+                }
                 break;
             case Order::CYCLE_RESET_PRICE:
                 $user->resetTraffic();
                 break;
             default:
-                $orderType = $this->getAttribute(Order::FIELD_TYPE);
-                $orderCycle = $this->getAttribute(Order::FIELD_CYCLE);
-                $userExpiredAt = $user->getAttribute(User::FIELD_EXPIRED_AT);
                 if ($orderType === Order::TYPE_NEW_ORDER || ($orderType=== Order::TYPE_UPGRADE && $userExpiredAt === null)) {
                     $user->resetTraffic();
                 }

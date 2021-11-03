@@ -78,6 +78,8 @@ class AdminRoute
             $router->post('/user/batchBan', 'Admin\\UserController@batchBan');
             $router->post('/user/resetSecret', 'Admin\\UserController@resetSecret');
             $router->post('/user/setInviteUser', 'Admin\\UserController@setInviteUser');
+            $router->get ('/user/stats', 'Admin\\UserController@stats');
+
             // StatOrder
             $router->get ('/stat/getOverride', 'Admin\\StatController@override');
             $router->get ('/stat/getServerLastRank', 'Admin\\StatController@serverLastRank');
@@ -100,6 +102,7 @@ class AdminRoute
             $router->get ('/knowledge/getCategory', 'Admin\\KnowledgeController@category');
             $router->post('/knowledge/save', 'Admin\\KnowledgeController@save');
             $router->post('/knowledge/show', 'Admin\\KnowledgeController@show');
+            $router->post('/knowledge/free', 'Admin\\KnowledgeController@free');
             $router->post('/knowledge/drop', 'Admin\\KnowledgeController@drop');
             $router->post('/knowledge/sort', 'Admin\\KnowledgeController@sort');
             // Payment

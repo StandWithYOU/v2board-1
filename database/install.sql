@@ -417,7 +417,9 @@ CREATE TABLE `v2_user` (
                            KEY `group_id` (`group_id`) USING BTREE,
                            KEY `token` (`token`) USING BTREE,
                            KEY `password_email` (`password`,`email`) USING BTREE,
-                           KEY `telegram_id` (`telegram_id`) USING BTREE
+                           KEY `telegram_id` (`telegram_id`) USING BTREE,
+                           KEY `invite_user_id-plan_id` (`invite_user_id`,`plan_id`) USING BTREE,
+                           KEY `invite_user_id` (`invite_user_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

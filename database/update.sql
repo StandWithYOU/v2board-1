@@ -34,6 +34,7 @@ ALTER TABLE `v2_plan`
     ADD `reset_traffic_method` tinyint(1) NULL AFTER `reset_price`;
 
 ALTER TABLE `v2board`.`v2_knowledge` ADD COLUMN `free` tinyint(1) NOT NULL DEFAULT 1  COMMENT '是否免费' AFTER `show`;
+
 DROP TABLE IF EXISTS `v2_invite_package`;
 CREATE TABLE `v2_invite_package` (
                                      `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -47,6 +48,9 @@ CREATE TABLE `v2_invite_package` (
                                      UNIQUE KEY `from_user_id` (`from_user_id`) USING BTREE,
                                      KEY `user_id` (`user_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `v2board`.`v2_user` DROP INDEX `inviter_user_id-plan_id`, ADD INDEX `invite_user_id-plan_id` USING BTREE (`invite_user_id`, `plan_id`) comment '';
+ALTER TABLE `v2board`.`v2_user` DROP INDEX `invite_user_id`, ADD INDEX `invite_user_id` USING BTREE (`invite_user_id`) comment '';
 
 SET FOREIGN_KEY_CHECKS = 1;
 

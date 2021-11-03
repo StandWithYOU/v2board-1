@@ -94,6 +94,8 @@ use Throwable;
  * @property-read Collection|Ticket[] $tickets
  * @property-read int|null $tickets_count
  * @method static Builder|User whereLastCheckinAt($value)
+ * @property-read Collection|InvitePackage[] $invitePackages
+ * @property-read int|null $invite_packages_count
  */
 class User extends Model
 {
@@ -254,6 +256,59 @@ class User extends Model
         where(InvitePackage::FIELD_STATUS, InvitePackage::STATUS_ACTIVATED)->sum(InvitePackage::FIELD_VALUE);
     }
 
+    /**
+     * count invited users with plan change
+     *
+     * @param int $planId
+     * @return int
+     */
+    public function countInvitedUsersWithPlanChanged(int $planId): int
+    {
+        return User::whereInviteUserId($this->getKey())->where(User::FIELD_PLAN_ID, '!=', $planId)->count();
+    }
+
+
+    /**
+     * count invited users with traffic getter then limit
+     *
+     * @param int $limit
+     * @return int
+     */
+    public function countInvitedUsersWithTrafficUsed(int $limit): int
+    {
+        return User::whereInviteUserId($this->getKey())->where(DB::raw('(u+d)'), '>', $limit)->count();
+    }
+
+    /**
+     * count invited users with (traffic getter then limit and plan change)
+     *
+     * @param int $planId
+     * @param int $limit
+     * @return int
+     */
+    public function countInvitedUsersWithTrafficUsedAndPlanChanged(int $planId, int $limit): int
+    {
+        return User::whereInviteUserId($this->getKey())->where(User::FIELD_PLAN_ID, '!=', $planId)->
+        where(DB::raw('(u+d)'), '>', $limit)->count();
+    }
+
+
+    /**
+     * count invited users with (traffic getter then limit or plan change)
+     *
+     * @param int $planId
+     * @param int $limit
+     * @return int
+     */
+    public function countInvitedUsersWithTrafficUsedOrPlanChanged(int $planId, int $limit): int
+    {
+        return User::whereInviteUserId($this->getKey())->where(function ($query) use ($planId, $limit) {
+            /**
+             * @var Builder $query
+             */
+            $query->where(User::FIELD_PLAN_ID, '!=', $planId)->orWhere(DB::raw('(u+d)'), '>', $limit);
+        })->count();
+    }
 
     /**
      * get unused invite codes
@@ -282,16 +337,39 @@ class User extends Model
     /**
      * Calculate the effective quantity with invite packages
      *
-     * @param int $limit
-     * @param int $recoveryLimit
-     *
      * @return int
      */
-    public function calAvailableNumberWithInvitePackages(int $limit, int $recoveryLimit): int
+    public function calAvailableNumberWithInvitePackages( ): int
     {
+        $limit = (int)config('v2board.package_limit', 3);
+        $recoveryLimit = (boolean)config('v2board.package_recovery_limit', 0);
+        $recoveryConditionType = config('v2board.package_recovery_condition_type', 0);
+        $registerPlanId = config('try_out_plan_id', 0);
+        $trafficLowerLimit = config('package_recovery_traffic_lower_limit', 1);
         $total = $limit;
         if ($recoveryLimit > 0) {
-            $total = $total + ($this->countPaidInviteUsers() * $recoveryLimit);
+            switch ($recoveryConditionType) {
+                case 0: //被邀请人每次购买套餐
+                    $total = $total + ($this->countPaidInviteUsers() * $recoveryLimit);
+                    break;
+                case 1: //被邀请人首次订阅变更
+                    $total = $total + ($this->countInvitedUsersWithPlanChanged($registerPlanId) * $recoveryLimit);
+                    break;
+                case 2: //被邀请人满足流量下限
+                    $total = $total + ($this->countInvitedUsersWithTrafficUsed($trafficLowerLimit) * $recoveryLimit);
+                    break;
+                case 3: //被邀请人首次订阅变更并满足流量使用下限
+                    $total = $total + ($this->countInvitedUsersWithTrafficUsedAndPlanChanged($registerPlanId,
+                            $trafficLowerLimit) * $recoveryLimit);
+                    break;
+                case 4:
+                    $total = $total + ($this->countInvitedUsersWithTrafficUsedOrPlanChanged($registerPlanId,
+                            $trafficLowerLimit) * $recoveryLimit);
+                    break;
+                default:
+                    break;
+            }
+
         }
         $total = $total - $this->countInvitePackages();
         return $total >= 0 ? $total : 0;

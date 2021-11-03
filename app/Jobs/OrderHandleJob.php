@@ -50,7 +50,8 @@ class OrderHandleJob implements ShouldQueue
                 }
                 break;
             case Order::STATUS_PENDING:
-                $order->open();
+                $resetOnetimeTrafficEnable = (boolean)config('v2board.reset_onetime_traffic_enable', 1);
+                $order->open($resetOnetimeTrafficEnable);
                 break;
         }
     }

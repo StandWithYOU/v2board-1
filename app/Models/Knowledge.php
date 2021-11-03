@@ -32,6 +32,8 @@ use App\Models\Traits\Serialize;
  * @method static Builder|Knowledge whereTitle($value)
  * @method static Builder|Knowledge whereUpdatedAt($value)
  * @mixin Eloquent
+ * @property int $free 是否免费
+ * @method static Builder|Knowledge whereFree($value)
  */
 class Knowledge extends Model
 {
