@@ -11,7 +11,7 @@ use App\Utils\Helper;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -52,7 +52,7 @@ class UserController extends Controller
      * @param Request $request
      * @param Builder $builder
      */
-    private function _filter(Request $request, Builder $builder)
+    private function _filter(Request $request,Builder $builder)
     {
         $reqFilter = (array)$request->input('filter');
         foreach ($reqFilter as $filter) {
