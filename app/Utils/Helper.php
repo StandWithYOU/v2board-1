@@ -89,13 +89,13 @@ class Helper
     /**
      * multi password verify
      *
-     * @param string $algo
-     * @param string $salt
+     * @param string|null $algo
+     * @param string|null $salt
      * @param string $password
      * @param string $hash
      * @return bool
      */
-    public static function multiPasswordVerify(string $algo, string $salt, string $password, string $hash): bool
+    public static function multiPasswordVerify(?string $algo, ?string $salt, string $password, string $hash): bool
     {
         switch ($algo) {
             case 'md5':
