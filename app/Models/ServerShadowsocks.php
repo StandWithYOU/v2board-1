@@ -116,7 +116,26 @@ class ServerShadowsocks extends Model
             /**
              * @var ServerShadowsocks $server
              */
-            $server->setAttribute("type", self::TYPE);
+            $parentId = $server->getAttribute(ServerShadowsocks::FIELD_PARENT_ID);
+            $nodeId = $parentId > 0 ? $parentId : $server->getKey();
+            $cacheKeyOnline = CacheKey::get(CacheKey::SERVER_SHADOWSOCKS_ONLINE_USER, $nodeId);
+            $lastCheckAt = Cache::get(CacheKey::get(CacheKey::SERVER_SHADOWSOCKS_LAST_CHECK_AT, $server['id']));
+            $lastPushAt = Cache::get(CacheKey::get(CacheKey::SERVER_SHADOWSOCKS_LAST_PUSH_AT, $server['id']));
+            $online = Cache::get($cacheKeyOnline) ?? 0;
+
+            if ((time() - 300) >= $lastCheckAt) {
+                $availableStatus = 0;
+            } else if ((time() - 300) >= $lastPushAt) {
+                $availableStatus = 1;
+            } else {
+                $availableStatus = 2;
+            }
+
+            $server->setAttribute('type', self::TYPE);
+            $server->setAttribute('online', $online);
+            $server->setAttribute('available_status',  $availableStatus);
+            $server->setAttribute('last_check_at', $lastCheckAt);
+            $server->setAttribute('last_push_at', $lastCheckAt);
         }
         return $servers;
     }
