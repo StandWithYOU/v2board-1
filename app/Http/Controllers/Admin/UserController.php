@@ -583,4 +583,50 @@ class UserController extends Controller
         ]);
     }
 
+
+
+    public function stats(Request $request)
+    {
+        $reqId = $request->get('id');
+        $user = User::find($reqId);
+        if ($user === null) {
+            abort(500, "user not found");
+        }
+
+        $registerPlanId = config('try_out_plan_id', 0);
+        $trafficLowerLimit = config('package_recovery_traffic_lower_limit', 1);
+
+        return response([
+            'data' => [
+                'order' => [
+                    //有收入订单
+                    'income_total' => $user->countIncomeOrders(),
+                    //未支付订单
+                    'unpaid_total' => $user->countUnpaidOrders(),
+                ],
+                'invite'=> [
+                    //邀请总人数
+                    ' vv' => $user->countInvitedUsers(),
+                    //已激活礼包数
+                    'activated_packages_total' =>  $user->countActivatedInvitePackages(),
+                    //已激活总流量
+                    'activated_package_values' => $user->sumActivatedInvitePackagesValues(),
+                    //可获得礼包数
+                    'available_packages_total' => $user->calAvailableNumberWithInvitePackages(),
+                    //被邀请人订阅变化人数
+                    'plan_changed_total' =>$user->countInvitedUsersWithPlanChanged($registerPlanId),
+                    //被邀请人购买总单数
+                    'paid_order_total' => $user->countPaidInviteUsers(),
+                     //被邀请人满足流量
+                    'traffic_used_total' =>  $user->countInvitedUsersWithTrafficUsed($trafficLowerLimit),
+                    //订阅变更并且流量满足
+                    'traffic_used_and_plan_changed_total' =>
+                        $user->countInvitedUsersWithTrafficUsedAndPlanChanged($registerPlanId,$trafficLowerLimit),
+                    'traffic_used_or_plan_changed_total' =>
+                        $user->countInvitedUsersWithTrafficUsedOrPlanChanged($registerPlanId,$trafficLowerLimit)
+                ],
+
+            ]
+        ]);
+    }
 }

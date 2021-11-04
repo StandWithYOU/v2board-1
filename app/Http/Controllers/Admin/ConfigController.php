@@ -64,6 +64,8 @@ class ConfigController extends Controller
                     'package_cycle' => config('v2board.package_cycle', 'onetime_price'),
                     'package_limit' => config('v2board.package_limit', 3),
                     'package_recovery_limit' => config('v2board.package_recovery_limit', 1),
+                    'package_recovery_condition_type' => config('v2board.package_recovery_condition_type', 2),
+                    'package_recovery_traffic_lower_limit' => config('v2board.package_recovery_traffic_lower_limit', 100),
                 ],
                 'site' => [
                     'safe_mode_enable' => (int)config('v2board.safe_mode_enable', 0),
@@ -73,6 +75,7 @@ class ConfigController extends Controller
                     'app_description' => config('v2board.app_description', 'V2Board is best!'),
                     'app_url' => config('v2board.app_url'),
                     'subscribe_url' => config('v2board.subscribe_url'),
+                    'invite_url' => config('v2board.invite_url'),
                     'try_out_plan_id' => (int)config('v2board.try_out_plan_id', 0),
                     'try_out_hour' => (int)config('v2board.try_out_hour', 1),
                     'email_whitelist_enable' => (int)config('v2board.email_whitelist_enable', 0),

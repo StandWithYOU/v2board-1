@@ -95,21 +95,24 @@ class InviteController extends Controller
         $defaultPlan = Plan::find($defaultPackagePlanId);
         $stat = [
             //已注册用户数
-            $user->countInvitedUsers(),
+            // $user->countInvitedUsers(),
             //邀请礼包的剩余次数
-            $user->calAvailableNumberWithInvitePackages($defaultPackageLimit, $defaultPackageRecoveryLimit),
+            //$user->calAvailableNumberWithInvitePackages($defaultPackageLimit, $defaultPackageRecoveryLimit),
+            //已获得礼包数
+            $user->countActivatedInvitePackages(),
             //每次邀请可获得流量(GB)
             $defaultPlan !== null ? $defaultPlan->getAttribute(Plan::FIELD_TRANSFER_ENABLE) : 0,
             //已获得总流量(GB)
             $user->sumActivatedInvitePackagesValues(),
             //礼包购买恢复次数
-            $defaultPackageRecoveryLimit
+            //$defaultPackageRecoveryLimit
         ];
 
         return response([
             'data' => [
                 'codes' => $unUsedCodes,
-                'stat' => $stat
+                'stat' => $stat,
+                'invite_url' => config('v2board.invite_url')
             ]
         ]);
     }
@@ -135,8 +138,10 @@ class InviteController extends Controller
         return response([
             'data' => [
                 'invite_users' => $user->countInvitedUsers(),
+                'invite_activated_packages' => $user->countActivatedInvitePackages(),
                 'total_values' => $user->sumActivatedInvitePackagesValues(),
-                'invite_code' => $user->getUnusedInviteCode() ? $user->getUnusedInviteCode()->getAttribute(InviteCode::FIELD_CODE) :null
+                'invite_code' => $user->getUnusedInviteCode() ? $user->getUnusedInviteCode()->getAttribute(InviteCode::FIELD_CODE) :null,
+                'invite_url' => config('v2board.invite_url','')
             ]
         ]);
     }
