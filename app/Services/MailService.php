@@ -33,7 +33,7 @@ class MailService
         }
 
         $userId = $user->getAttribute(User::FIELD_ID);
-        $flag = CacheKey::get('LAST_SEND_EMAIL_REMIND_TRAFFIC', $userId);
+        $flag = CacheKey::get(CacheKey::LAST_SEND_EMAIL_REMIND_TRAFFIC, $userId);
 
         if (Cache::get($flag)) {
             return;

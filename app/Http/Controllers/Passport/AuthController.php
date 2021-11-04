@@ -73,7 +73,7 @@ class AuthController extends Controller
             if (empty($reqEmailCode)) {
                 abort(500, __('Email verification code cannot be empty'));
             }
-            if (Cache::get(CacheKey::get('EMAIL_VERIFY_CODE', $reqEmail)) !== $reqEmailCode) {
+            if (Cache::get(CacheKey::get(CacheKey::EMAIL_VERIFY_CODE, $reqEmail)) !== $reqEmailCode) {
                 abort(500, __('Incorrect email verification code'));
             }
         }
@@ -136,7 +136,7 @@ class AuthController extends Controller
         }
 
         if ((int)config('v2board.email_verify', 0)) {
-            Cache::forget(CacheKey::get('EMAIL_VERIFY_CODE', $request->input('email')));
+            Cache::forget(CacheKey::get(CacheKey::EMAIL_VERIFY_CODE, $request->input('email')));
         }
 
         $request->session()->put('email', $user->getAttribute(User::FIELD_EMAIL));
@@ -213,7 +213,7 @@ class AuthController extends Controller
             abort(500, '参数错误');
 
         }
-        $key = CacheKey::get('TEMP_TOKEN', $request->input('verify'));
+        $key = CacheKey::get(CacheKey::TEMP_TOKEN, $request->input('verify'));
         $userId = Cache::get($key);
         if (!$userId) {
             abort(500, __('Token error'));
@@ -254,7 +254,7 @@ class AuthController extends Controller
         }
 
         $code = Helper::guid();
-        $key = CacheKey::get('TEMP_TOKEN', $code);
+        $key = CacheKey::get(CacheKey::TEMP_TOKEN, $code);
         Cache::put($key, $user->getKey(), 60);
         return response([
             'data' => $code
@@ -276,7 +276,7 @@ class AuthController extends Controller
         }
 
         $code = Helper::guid();
-        $key = CacheKey::get('TEMP_TOKEN', $code);
+        $key = CacheKey::get(CacheKey::TEMP_TOKEN, $code);
         Cache::put($key, $user->id, 60);
         $redirect = '/#/login?verify=' . $code . '&redirect=' . ($request->input('redirect') ? $request->input('redirect') : 'dashboard');
         if (config('v2board.app_url')) {
@@ -322,7 +322,7 @@ class AuthController extends Controller
         $reqEmailCode = $request->input('email_code');
         $reqPassword = $request->input('password');
 
-        if (Cache::get(CacheKey::get('EMAIL_VERIFY_CODE', $reqEmail)) !== $reqEmailCode) {
+        if (Cache::get(CacheKey::get(CacheKey::EMAIL_VERIFY_CODE, $reqEmail)) !== $reqEmailCode) {
             abort(500, __('Incorrect email verification code'));
         }
 
@@ -342,7 +342,7 @@ class AuthController extends Controller
         if (!$user->save()) {
             abort(500, __('Reset failed'));
         }
-        Cache::forget(CacheKey::get('EMAIL_VERIFY_CODE', $reqEmail));
+        Cache::forget(CacheKey::get(CacheKey::EMAIL_VERIFY_CODE, $reqEmail));
         return response([
             'data' => true
         ]);

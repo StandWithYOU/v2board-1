@@ -63,7 +63,7 @@ class CommController extends Controller
                 abort(500, __('Invalid code is incorrect'));
             }
         }
-        if (Cache::get(CacheKey::get('LAST_SEND_EMAIL_VERIFY_TIMESTAMP', $reqEmail))) {
+        if (Cache::get(CacheKey::get(CacheKey::LAST_SEND_EMAIL_VERIFY_TIMESTAMP, $reqEmail))) {
             abort(500, __('Email verification code has been sent, please request again later'));
         }
         $code = rand(100000, 999999);
@@ -80,8 +80,8 @@ class CommController extends Controller
             ]
         ]);
 
-        Cache::put(CacheKey::get('EMAIL_VERIFY_CODE', $reqEmail), $code, 300);
-        Cache::put(CacheKey::get('LAST_SEND_EMAIL_VERIFY_TIMESTAMP', $reqEmail), time(), 60);
+        Cache::put(CacheKey::get(CacheKey::EMAIL_VERIFY_CODE, $reqEmail), $code, 300);
+        Cache::put(CacheKey::get(CacheKey::LAST_SEND_EMAIL_VERIFY_TIMESTAMP, $reqEmail), time(), 60);
         return response([
             'data' => true
         ]);

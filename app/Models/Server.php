@@ -293,10 +293,10 @@ class Server extends Model
 
             $server->setAttribute("type", self::TYPE);
             if ($server->getAttribute(self::FIELD_PARENT_ID) > 0) {
-                $server->setAttribute('last_check_at', Cache::get(CacheKey::get('SERVER_V2RAY_LAST_CHECK_AT',
+                $server->setAttribute('last_check_at', Cache::get(CacheKey::get(CacheKey::SERVER_V2RAY_LAST_CHECK_AT,
                     $server->getAttribute(self::FIELD_PARENT_ID))));
             } else {
-                $server->setAttribute('last_check_at', Cache::get(CacheKey::get('SERVER_V2RAY_LAST_CHECK_AT',
+                $server->setAttribute('last_check_at', Cache::get(CacheKey::get(CacheKey::SERVER_V2RAY_LAST_CHECK_AT,
                     $server->getKey())));
             }
         }

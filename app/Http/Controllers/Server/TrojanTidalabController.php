@@ -55,7 +55,7 @@ class TrojanTidalabController extends Controller
             abort(500, 'fail');
         }
 
-        Cache::put(CacheKey::get('SERVER_TROJAN_LAST_CHECK_AT', $server->getKey()), time(), 3600);
+        Cache::put(CacheKey::get(CacheKey::SERVER_TROJAN_LAST_CHECK_AT, $server->getKey()), time(), 3600);
         $result = [];
         if ($server->isShow()) {
             $users = $server->findAvailableUsers();
@@ -104,8 +104,8 @@ class TrojanTidalabController extends Controller
             ]);
         }
 
-        Cache::put(CacheKey::get('SERVER_TROJAN_ONLINE_USER', $server->getKey()), count($data), 3600);
-        Cache::put(CacheKey::get('SERVER_TROJAN_LAST_PUSH_AT', $server->getKey()), time(), 3600);
+        Cache::put(CacheKey::get(CacheKey::SERVER_TROJAN_ONLINE_USER, $server->getKey()), count($data), 3600);
+        Cache::put(CacheKey::get(CacheKey::SERVER_TROJAN_LAST_PUSH_AT, $server->getKey()), time(), 3600);
 
         foreach ($data as $item) {
             $rate = $server->getAttribute(Server::FIELD_RATE);
