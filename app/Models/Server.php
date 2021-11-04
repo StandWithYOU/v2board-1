@@ -263,7 +263,27 @@ class Server extends Model
             /**
              * @var Server $server
              */
-            $server->setAttribute("type", self::TYPE);
+            $parentId = $server->getAttribute(Server::FIELD_PARENT_ID);
+            $nodeId = $parentId > 0 ? $parentId : $server->getKey();
+            $cacheKeyOnline = CacheKey::get(CacheKey::SERVER_V2RAY_ONLINE_USER, $nodeId);
+            $lastCheckAt = Cache::get(CacheKey::get(CacheKey::SERVER_V2RAY_LAST_CHECK_AT, $server['id']));
+            $lastPushAt = Cache::get(CacheKey::get(CacheKey::SERVER_V2RAY_LAST_PUSH_AT, $server['id']));
+            $online = Cache::get($cacheKeyOnline) ?? 0;
+
+
+            if ((time() - 300) >= $lastCheckAt) {
+                $availableStatus = 0;
+            } else if ((time() - 300) >= $lastPushAt) {
+                $availableStatus = 1;
+            } else {
+                $availableStatus = 2;
+            }
+
+            $server->setAttribute('type', self::TYPE);
+            $server->setAttribute('online',  $online);
+            $server->setAttribute('available_status',  $availableStatus);
+            $server->setAttribute('last_check_at', $lastCheckAt);
+            $server->setAttribute('last_push_at', $lastCheckAt);
         }
 
         return $servers;
@@ -293,10 +313,10 @@ class Server extends Model
 
             $server->setAttribute("type", self::TYPE);
             if ($server->getAttribute(self::FIELD_PARENT_ID) > 0) {
-                $server->setAttribute('last_check_at', Cache::get(CacheKey::get('SERVER_V2RAY_LAST_CHECK_AT',
+                $server->setAttribute('last_check_at', Cache::get(CacheKey::get(CacheKey::SERVER_V2RAY_LAST_CHECK_AT,
                     $server->getAttribute(self::FIELD_PARENT_ID))));
             } else {
-                $server->setAttribute('last_check_at', Cache::get(CacheKey::get('SERVER_V2RAY_LAST_CHECK_AT',
+                $server->setAttribute('last_check_at', Cache::get(CacheKey::get(CacheKey::SERVER_V2RAY_LAST_CHECK_AT,
                     $server->getKey())));
             }
         }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\Admin\ConfigSave;
+use App\Services\TelegramService;
 use Artisan;
 use Config;
 use File;
@@ -10,6 +11,8 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use App\Utils\Dict;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
+use Illuminate\Http\Request;
+
 
 class ConfigController extends Controller
 
@@ -41,6 +44,21 @@ class ConfigController extends Controller
         ]);
     }
 
+    public function setTelegramWebhook(Request $request)
+    {
+        $reqBotToken = $request->input('telegram_bot_token', null);
+        $token = $reqBotToken ?? config('v2board.telegram_bot_token');
+        $telegramService = new TelegramService($token);
+        $telegramService->getMe();
+        $telegramService->setWebhook(
+            url(
+                '/api/v1/guest/telegram/webhook?access_token=' . md5($token)
+            )
+        );
+        return response([
+            'data' => true
+        ]);
+    }
 
     /**
      * @return ResponseFactory|Response
