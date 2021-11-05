@@ -136,7 +136,7 @@ class TrojanTidalabController extends Controller
             abort(500, '参数错误');
         }
         /**
-         * @var Server $server
+         * @var ServerTrojan $server
          */
         $server = ServerTrojan::find($reqNodeId);
         if ($server === null) {
@@ -144,14 +144,8 @@ class TrojanTidalabController extends Controller
         }
 
         try {
-            $configs = [];
-            $configs['log_enable'] = config('v2board.server_log_enable');
-            $configs['domain_rules'] = config('v2board.server_v2ray_domain');
-            $configs['protocol_rules'] = config('v2board.server_v2ray_protocol');
-
-            $json = $server->config($reqLocalPort, $configs);
+            $json = $server->config($reqLocalPort);
             die(json_encode($json, JSON_UNESCAPED_UNICODE));
-
         } catch (Exception $e) {
             abort(500, $e->getMessage());
         }
