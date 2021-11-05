@@ -28,7 +28,9 @@ class ConfigSave extends FormRequest
             'package_plan_id' => 'integer',
             'package_cycle' => 'in:onetime_price,reset_price,month_price,quarter_price,half_year_price,year_price,two_year_price,three_year_price',
             'package_limit' => 'integer|min:1',
-            'package_recovery_limit' => 'integer|min:1',
+            'package_recovery_limit' => 'integer|min:0',
+            'package_recovery_traffic_lower_limit' => 'integer|min:1',
+            'package_recovery_condition_type' => 'integer|in:0,1,2,3,4',
             // site
             'stop_register' => 'in:0,1',
             'email_verify' => 'in:0,1',
@@ -36,6 +38,7 @@ class ConfigSave extends FormRequest
             'app_description' => '',
             'app_url' => 'nullable|url',
             'subscribe_url' => 'nullable',
+            'invite_url' => 'nullable|url',
             'try_out_enable' => 'in:0,1',
             'try_out_plan_id' => 'integer',
             'try_out_hour' => 'numeric',
