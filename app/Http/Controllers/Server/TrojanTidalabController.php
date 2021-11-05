@@ -57,19 +57,17 @@ class TrojanTidalabController extends Controller
 
         Cache::put(CacheKey::get(CacheKey::SERVER_TROJAN_LAST_CHECK_AT, $server->getKey()), time(), 3600);
         $result = [];
-        if ($server->isShow()) {
-            $users = $server->findAvailableUsers();
-            foreach ($users as $user) {
-                /**
-                 * @var User $user
-                 */
-                $user->setAttribute("trojan_user", [
-                    "password" => $user->getAttribute(User::FIELD_UUID),
-                ]);
-                unset($user['uuid']);
-                unset($user['email']);
-                array_push($result, $user);
-            }
+        $users = $server->findAvailableUsers();
+        foreach ($users as $user) {
+            /**
+             * @var User $user
+             */
+            $user->setAttribute("trojan_user", [
+                "password" => $user->getAttribute(User::FIELD_UUID),
+            ]);
+            unset($user['uuid']);
+            unset($user['email']);
+            array_push($result, $user);
         }
 
         return response([
