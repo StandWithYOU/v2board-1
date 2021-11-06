@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Traits\Serialize;
 use App\Utils\CacheKey;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
-use App\Models\Traits\Serialize;
 
 
 /**
@@ -52,6 +52,7 @@ use App\Models\Traits\Serialize;
 class ServerTrojan extends Model
 {
     use Serialize;
+
     const FIELD_ID = "id";
     const FIELD_GROUP_ID = "group_id";
     const FIELD_PARENT_ID = "parent_id";
@@ -144,6 +145,28 @@ class ServerTrojan extends Model
         return $servers;
 
     }
+
+    /**
+     * fault nodes
+     *
+     * @return array
+     */
+    public static function faultNodeNames(): array
+    {
+        $result = [];
+        $servers = self::where(ServerShadowsocks::FIELD_SHOW, self::SHOW_ON)->get();
+        foreach ($servers as $server) {
+            $parentId = $server->getAttribute(ServerTrojan::FIELD_PARENT_ID);
+            $nodeId = $parentId > 0 ? $server->getAttribute(ServerTrojan::FIELD_PARENT_ID) : $server->getKey();
+            $lastCheckAt = Cache::get(CacheKey::get(CacheKey::SERVER_TROJAN_LAST_CHECK_AT, $nodeId));
+
+            if ($lastCheckAt < (time() - 300)) {
+                array_push($result, $server->getAttribute(ServerTrojan::FIELD_NAME));
+            }
+        }
+        return $result;
+    }
+
 
     /**
      * config
