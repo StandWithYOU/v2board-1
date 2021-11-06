@@ -124,8 +124,8 @@ class ServerTrojan extends Model
             $parentId = $server->getAttribute(ServerTrojan::FIELD_PARENT_ID);
             $nodeId = $parentId > 0 ? $parentId : $server->getKey();
             $cacheKeyOnline = CacheKey::get(CacheKey::SERVER_TROJAN_ONLINE_USER, $nodeId);
-            $lastCheckAt = Cache::get(CacheKey::get(CacheKey::SERVER_TROJAN_LAST_CHECK_AT, $server['id']));
-            $lastPushAt = Cache::get(CacheKey::get(CacheKey::SERVER_TROJAN_LAST_PUSH_AT, $server['id']));
+            $lastCheckAt = Cache::get(CacheKey::get(CacheKey::SERVER_TROJAN_LAST_CHECK_AT, $nodeId));
+            $lastPushAt = Cache::get(CacheKey::get(CacheKey::SERVER_TROJAN_LAST_PUSH_AT, $nodeId));
             $online = Cache::get($cacheKeyOnline) ?? 0;
 
             if ((time() - 300) >= $lastCheckAt) {

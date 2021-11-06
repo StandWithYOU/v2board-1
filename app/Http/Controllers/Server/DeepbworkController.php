@@ -23,21 +23,6 @@ use Illuminate\Support\Facades\Cache;
 class DeepbworkController extends Controller
 {
     /**
-     * DeepbworkController constructor.
-     * @param Request $request
-     */
-    public function __construct(Request $request)
-    {
-        $reqToken = $request->input('token');
-        if (empty($reqToken)) {
-            abort(500, 'token is null');
-        }
-        if ($reqToken !== config('v2board.server_token')) {
-            abort(500, 'token is error');
-        }
-    }
-
-    /**
      * 后端获取用户User
      *
      * @param Request $request
