@@ -6,6 +6,7 @@ use App\Http\Middleware\Admin;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\CheckForMaintenanceMode;
 use App\Http\Middleware\Client;
+use App\Http\Middleware\Server;
 use App\Http\Middleware\CORS;
 use App\Http\Middleware\EncryptCookies;
 use App\Http\Middleware\ForceJson;
@@ -96,6 +97,7 @@ class Kernel extends HttpKernel
         'client' => Client::class,
         'staff' => Staff::class,
         'cors' => handleCors::class,
+        'server'=> Server::class
     ];
 
     /**

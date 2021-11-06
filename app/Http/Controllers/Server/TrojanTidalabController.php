@@ -24,21 +24,6 @@ use Illuminate\Support\Facades\Cache;
 class TrojanTidalabController extends Controller
 {
     /**
-     * TrojanTidalabController constructor.
-     * @param Request $request
-     */
-    public function __construct(Request $request)
-    {
-        $reqToken = $request->input('token');
-        if (empty($reqToken)) {
-            abort(500, 'token is null');
-        }
-        if ($reqToken !== config('v2board.server_token')) {
-            abort(500, 'token is error');
-        }
-    }
-
-    /**
      * user
      *
      * @param Request $request
