@@ -266,8 +266,8 @@ class Server extends Model
             $parentId = $server->getAttribute(Server::FIELD_PARENT_ID);
             $nodeId = $parentId > 0 ? $parentId : $server->getKey();
             $cacheKeyOnline = CacheKey::get(CacheKey::SERVER_V2RAY_ONLINE_USER, $nodeId);
-            $lastCheckAt = Cache::get(CacheKey::get(CacheKey::SERVER_V2RAY_LAST_CHECK_AT, $server['id']));
-            $lastPushAt = Cache::get(CacheKey::get(CacheKey::SERVER_V2RAY_LAST_PUSH_AT, $server['id']));
+            $lastCheckAt = Cache::get(CacheKey::get(CacheKey::SERVER_V2RAY_LAST_CHECK_AT, $nodeId));
+            $lastPushAt = Cache::get(CacheKey::get(CacheKey::SERVER_V2RAY_LAST_PUSH_AT, $nodeId));
             $online = Cache::get($cacheKeyOnline) ?? 0;
 
 
