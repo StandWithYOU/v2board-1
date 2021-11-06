@@ -69,7 +69,7 @@ class PaymentController extends Controller
      * @param PaymentSave $request
      * @return Application|ResponseFactory|Response
      */
-    public function save(PaymentSave $request)
+    public function save(Request $request)
     {
         $reqId = (int)$request->input('id');
         $reqName = $request->input('name');
