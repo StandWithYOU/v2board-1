@@ -6,9 +6,7 @@ use App\Models\Server;
 use App\Models\ServerShadowsocks;
 use App\Models\ServerTrojan;
 use App\Services\TelegramService;
-use App\Utils\CacheKey;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Cache;
 
 class CheckServer extends Command
 {
@@ -46,8 +44,23 @@ class CheckServer extends Command
         $this->checkOffline();
     }
 
+    /**
+     * check offline
+     *
+     * @return void
+     */
     private function checkOffline()
     {
-       //TODO
+        $shadowFaultNodes = ServerShadowsocks::faultNodeNames();
+        $v2rayFaultNodes = Server::faultNodeNames();
+        $trojanFaultServers = ServerTrojan::faultNodeNames();
+
+        $faultNodes = array_merge($shadowFaultNodes, $v2rayFaultNodes, $trojanFaultServers);
+        $faultNodesTotal = count($faultNodes);
+
+        if ($faultNodesTotal > 0) {
+           $message = "📮节点检查提醒：\n 现在有{$faultNodesTotal}节点处于离线状态，请立即检查: \n". join("\n", $faultNodes);
+           TelegramService::sendMessageWithAdmin($message);
+        }
     }
 }

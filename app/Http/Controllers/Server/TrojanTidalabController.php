@@ -57,19 +57,17 @@ class TrojanTidalabController extends Controller
 
         Cache::put(CacheKey::get(CacheKey::SERVER_TROJAN_LAST_CHECK_AT, $server->getKey()), time(), 3600);
         $result = [];
-        if ($server->isShow()) {
-            $users = $server->findAvailableUsers();
-            foreach ($users as $user) {
-                /**
-                 * @var User $user
-                 */
-                $user->setAttribute("trojan_user", [
-                    "password" => $user->getAttribute(User::FIELD_UUID),
-                ]);
-                unset($user['uuid']);
-                unset($user['email']);
-                array_push($result, $user);
-            }
+        $users = $server->findAvailableUsers();
+        foreach ($users as $user) {
+            /**
+             * @var User $user
+             */
+            $user->setAttribute("trojan_user", [
+                "password" => $user->getAttribute(User::FIELD_UUID),
+            ]);
+            unset($user['uuid']);
+            unset($user['email']);
+            array_push($result, $user);
         }
 
         return response([
@@ -136,7 +134,7 @@ class TrojanTidalabController extends Controller
             abort(500, '参数错误');
         }
         /**
-         * @var Server $server
+         * @var ServerTrojan $server
          */
         $server = ServerTrojan::find($reqNodeId);
         if ($server === null) {
@@ -144,14 +142,8 @@ class TrojanTidalabController extends Controller
         }
 
         try {
-            $configs = [];
-            $configs['log_enable'] = config('v2board.server_log_enable');
-            $configs['domain_rules'] = config('v2board.server_v2ray_domain');
-            $configs['protocol_rules'] = config('v2board.server_v2ray_protocol');
-
-            $json = $server->config($reqLocalPort, $configs);
+            $json = $server->config($reqLocalPort);
             die(json_encode($json, JSON_UNESCAPED_UNICODE));
-
         } catch (Exception $e) {
             abort(500, $e->getMessage());
         }

@@ -291,6 +291,27 @@ class Server extends Model
 
 
     /**
+     * fault nodes
+     *
+     * @return array
+     */
+    public static function faultNodeNames(): array
+    {
+        $result = [];
+        $servers = self::where(ServerShadowsocks::FIELD_SHOW, self::SHOW_ON)->get();
+        foreach ($servers as $server) {
+            $parentId = $server->getAttribute(Server::FIELD_PARENT_ID);
+            $nodeId = $parentId > 0 ? $server->getAttribute(Server::FIELD_PARENT_ID): $server ->getKey();
+            $lastCheckAt = Cache::get(CacheKey::get(CacheKey::SERVER_V2RAY_LAST_CHECK_AT, $nodeId));
+
+            if ($lastCheckAt < (time() - 300)) {
+                array_push($result, $server->getAttribute(Server::FIELD_NAME));
+            }
+        }
+        return $result;
+    }
+
+    /**
      * configs
      *
      * @param User $user

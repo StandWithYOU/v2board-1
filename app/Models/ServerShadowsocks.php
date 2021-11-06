@@ -49,6 +49,7 @@ use App\Models\Traits\Serialize;
 class ServerShadowsocks extends Model
 {
     use Serialize;
+
     const FIELD_ID = "id";
     const FIELD_GROUP_ID = "group_id";
     const FIELD_PARENT_ID = "parent_id";
@@ -138,6 +139,28 @@ class ServerShadowsocks extends Model
             $server->setAttribute('last_push_at', $lastCheckAt);
         }
         return $servers;
+    }
+
+
+    /**
+     * fault nodes
+     *
+     * @return array
+     */
+    public static function faultNodeNames(): array
+    {
+        $result = [];
+        $servers = self::where(ServerShadowsocks::FIELD_SHOW, self::SHOW_ON)->get();
+        foreach ($servers as $server) {
+            $parentId = $server->getAttribute(ServerShadowsocks::FIELD_PARENT_ID);
+            $nodeId = $parentId > 0 ? $server->getAttribute(ServerShadowsocks::FIELD_PARENT_ID) : $server->getKey();
+            $lastCheckAt = Cache::get(CacheKey::get(CacheKey::SERVER_SHADOWSOCKS_LAST_CHECK_AT, $nodeId));
+
+            if ($lastCheckAt < (time() - 300)) {
+                array_push($result, $server->getAttribute(Server::FIELD_NAME));
+            }
+        }
+        return $result;
     }
 
 
