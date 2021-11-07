@@ -594,8 +594,9 @@ class UserController extends Controller
             abort(500, "user not found");
         }
 
-        $registerPlanId = config('try_out_plan_id', 0);
-        $trafficLowerLimit = config('package_recovery_traffic_lower_limit', 1);
+        $registerPlanId = config('v2board.try_out_plan_id', 0);
+        $trafficLowerLimit = config('v2board.package_recovery_traffic_lower_limit', 1);
+        $trafficLowerLimit = $trafficLowerLimit * 1024 * 1024;
 
         return response([
             'data' => [
@@ -607,7 +608,7 @@ class UserController extends Controller
                 ],
                 'invite'=> [
                     //邀请总人数
-                    ' vv' => $user->countInvitedUsers(),
+                    'user_total' => $user->countInvitedUsers(),
                     //已激活礼包数
                     'activated_packages_total' =>  $user->countActivatedInvitePackages(),
                     //已激活总流量

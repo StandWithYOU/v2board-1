@@ -150,10 +150,8 @@ class AuthController extends Controller
             $inviteUser =  User::find($inviteUserId);
 
             if ($packagePlan !== null || $inviteUser === null) {
-                $configPackageLimit = (int)config('v2board.package_limit', 3);
-                $configPackageRecoveryLimit = (boolean)config('v2board.package_recovery_limit', 0);
-                $availableInvitePackageNumber = $user->calAvailableNumberWithInvitePackages($configPackageLimit,
-                    $configPackageRecoveryLimit);
+
+                $availableInvitePackageNumber = $user->calAvailableNumberWithInvitePackages();
 
                 if ($availableInvitePackageNumber > 0) {
                     //赠送流量

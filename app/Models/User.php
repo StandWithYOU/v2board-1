@@ -264,7 +264,8 @@ class User extends Model
      */
     public function countInvitedUsersWithPlanChanged(int $planId): int
     {
-        return User::whereInviteUserId($this->getKey())->where(User::FIELD_PLAN_ID, '!=', $planId)->count();
+        return User::whereInviteUserId($this->getKey())->where(User::FIELD_PLAN_ID, '!=', $planId)
+            ->where(User::FIELD_PLAN_ID, '>', 0 )->count();
     }
 
 
@@ -288,7 +289,8 @@ class User extends Model
      */
     public function countInvitedUsersWithTrafficUsedAndPlanChanged(int $planId, int $limit): int
     {
-        return User::whereInviteUserId($this->getKey())->where(User::FIELD_PLAN_ID, '!=', $planId)->
+        return User::whereInviteUserId($this->getKey())->where(User::FIELD_PLAN_ID, '!=', $planId)
+            ->where(User::FIELD_PLAN_ID, '>', 0)->
         where(DB::raw('(u+d)'), '>', $limit)->count();
     }
 
@@ -306,7 +308,8 @@ class User extends Model
             /**
              * @var Builder $query
              */
-            $query->where(User::FIELD_PLAN_ID, '!=', $planId)->orWhere(DB::raw('(u+d)'), '>', $limit);
+            $query->where(User::FIELD_PLAN_ID, '!=', $planId)->where(User::FIELD_PLAN_ID, '>', 0)
+                ->orWhere(DB::raw('(u+d)'), '>', $limit);
         })->count();
     }
 
@@ -344,8 +347,9 @@ class User extends Model
         $limit = (int)config('v2board.package_limit', 3);
         $recoveryLimit = (boolean)config('v2board.package_recovery_limit', 0);
         $recoveryConditionType = config('v2board.package_recovery_condition_type', 0);
-        $registerPlanId = config('try_out_plan_id', 0);
-        $trafficLowerLimit = config('package_recovery_traffic_lower_limit', 1);
+        $registerPlanId = config('v2board.try_out_plan_id', 0);
+        $trafficLowerLimit = config('v2board.package_recovery_traffic_lower_limit', 1);
+        $trafficLowerLimit = $trafficLowerLimit * 1024 * 1024;
         $total = $limit;
         if ($recoveryLimit > 0) {
             switch ($recoveryConditionType) {
