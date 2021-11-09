@@ -49,7 +49,7 @@ class ShadowsocksTidalabController extends Controller
              */
             array_push($result, [
                 'id' => $user->getKey(),
-                'port' => $server->getAttribute(ServerShadowsocks::FIELD_PORT),
+                'port' => $server->getAttribute(ServerShadowsocks::FIELD_SERVER_PORT),
                 'cipher' => $server->getAttribute(ServerShadowsocks::FIELD_CIPHER),
                 'secret' => $user->getAttribute(User::FIELD_UUID)
             ]);
