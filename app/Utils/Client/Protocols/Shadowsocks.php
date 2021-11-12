@@ -32,7 +32,7 @@ class Shadowsocks extends Protocol
         $subs['version'] = 1;
         $subs['bytes_used'] = $bytesUsed;
         $subs['bytes_remaining'] = $bytesRemaining;
-        $subs['servers'] = array_merge($subs['servers'] ?: [], $configs);
+        $subs['servers'] = array_merge($subs['servers'] ? $subs['servers'] : [], $configs);
 
         return json_encode($subs, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
     }
@@ -50,10 +50,6 @@ class Shadowsocks extends Protocol
         return $config;
     }
 
-    public static function SIP002($server, $user)
-    {
-        return "ss://".base64_encode($server['cipher'].":".$user['uuid'])."@".$server['host'].":".$server['port'];
-    }
 
     public static function buildShadowsocks($password, $server)
     {

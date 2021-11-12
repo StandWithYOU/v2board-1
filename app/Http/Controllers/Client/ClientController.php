@@ -56,7 +56,7 @@ class ClientController extends Controller
                 die($protocolInstance->handle());
             }
 
-            $protocolInstance = ClientService::getInstance($servers, $user, 'shadowsocks');
+            $protocolInstance = ClientService::getInstance($servers, $user, 'v2rayn');
             die($protocolInstance->handle());
         }
 
