@@ -112,6 +112,7 @@ class ConfigController extends Controller
                     'surplus_enable' => (int)config('v2board.surplus_enable', 1),
                 ],
                 'frontend' => [
+                    'frontend_theme' => config('v2board.frontend_theme', 'v2board'),
                     'frontend_theme_sidebar' => config('v2board.frontend_theme_sidebar', 'light'),
                     'frontend_theme_header' => config('v2board.frontend_theme_header', 'dark'),
                     'frontend_theme_color' => config('v2board.frontend_theme_color', 'default'),
