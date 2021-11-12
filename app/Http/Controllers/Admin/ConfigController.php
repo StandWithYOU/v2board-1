@@ -120,6 +120,7 @@ class ConfigController extends Controller
                     'reset_onetime_traffic_enable' => (int)config('v2board.reset_onetime_traffic_enable', 1),
                 ],
                 'frontend' => [
+                    'frontend_theme' => config('v2board.frontend_theme', 'v2board'),
                     'frontend_theme_sidebar' => config('v2board.frontend_theme_sidebar', 'light'),
                     'frontend_theme_header' => config('v2board.frontend_theme_header', 'dark'),
                     'frontend_theme_color' => config('v2board.frontend_theme_color', 'default'),
