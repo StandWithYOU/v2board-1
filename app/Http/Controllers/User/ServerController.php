@@ -10,7 +10,6 @@ use App\Models\Server;
 use App\Models\ServerLog;
 use App\Models\User;
 use Illuminate\Http\Response;
-use App\Utils\Client\Protocols\Shadowrocket;
 
 class ServerController extends Controller
 {
@@ -28,9 +27,6 @@ class ServerController extends Controller
         $servers = [];
         if ($user->isAvailable()) {
             $shadowServers = ServerShadowsocks::configs($user);
-            foreach ($shadowServers as $server) {
-                $server['link'] = Shadowrocket::buildShadowsocks($user->getAttribute(User::FIELD_UUID), $server);
-            }
             $v2rayServers = Server::configs($user);
             $trojanServers = ServerTrojan::configs($user);
 
