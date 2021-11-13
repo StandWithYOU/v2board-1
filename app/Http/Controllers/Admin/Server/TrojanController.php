@@ -176,27 +176,4 @@ class TrojanController extends Controller
             'data' => true
         ]);
     }
-
-    /**
-     * view config
-     *
-     * @param Request $request
-     * @return Application|ResponseFactory|Response
-     */
-    public function viewConfig(Request $request)
-    {
-        $reqNodeId = $request->input('node_id');
-
-        /**
-         * @var ServerTrojan $server
-         */
-        $server = ServerTrojan::find($reqNodeId);
-        if ($server === null) {
-            abort(500, '节点不存在');
-        }
-
-        return response([
-            'data' => $server->config(23333)
-        ]);
-    }
 }

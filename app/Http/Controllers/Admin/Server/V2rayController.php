@@ -190,33 +190,4 @@ class V2rayController extends Controller
         ]);
     }
 
-    /**
-     * view config
-     *
-     * @param Request $request
-     * @return Application|ResponseFactory|Response
-     */
-    public function viewConfig(Request $request)
-    {
-        $reqNodeId = $request->input('node_id');
-
-        /**
-         * @var Server $server
-         */
-        $server = Server::find($reqNodeId);
-        if ($server === null) {
-            abort(500, '节点不存在');
-        }
-        $configs = [];
-        $configs['log_enable'] = config('v2board.server_log_enable');
-        $configs['domain_rules'] = config('v2board.server_v2ray_domain');
-        $configs['protocol_rules'] = config('v2board.server_v2ray_protocol');
-
-        $json = $server->config(23333, $configs);
-
-
-        return response([
-            'data' => $json
-        ]);
-    }
 }
