@@ -215,18 +215,18 @@ class UserController extends Controller
             $user->setAttribute(User::FIELD_GROUP_ID, 0);
         }
 
-        if ($reqTransferEnable != null) {
+        if ($reqTransferEnable !== null) {
             $user->setAttribute(User::FIELD_TRANSFER_ENABLE, $reqTransferEnable);
         }
 
         $user->setAttribute(User::FIELD_EXPIRED_AT, $reqExpiredAt);
 
 
-        if ($reqBanned != null) {
+        if ($reqBanned !== null) {
             $user->setAttribute(User::FIELD_BANNED, $reqBanned);
         }
 
-        if ($reqCommissionRate != null) {
+        if ($reqCommissionRate !== null) {
             $user->setAttribute(User::FIELD_COMMISSION_TYPE, $reqCommissionType);
         }
 
@@ -234,27 +234,27 @@ class UserController extends Controller
         $user->setAttribute(User::FIELD_COMMISSION_RATE, $reqCommissionRate);
 
 
-        if ($reqIsAdmin != null) {
+        if ($reqIsAdmin !== null) {
             $user->setAttribute(User::FIELD_IS_ADMIN, $reqIsAdmin);
         }
 
-        if ($reqIsStaff != null) {
+        if ($reqIsStaff !== null) {
             $user->setAttribute(User::FIELD_IS_STAFF, $reqIsStaff);
         }
 
-        if ($reqU != null) {
+        if ($reqU !== null) {
             $user->setAttribute(User::FIELD_U, $reqU);
         }
 
-        if ($reqD != null) {
+        if ($reqD !== null) {
             $user->setAttribute(User::FIELD_D, $reqD);
         }
 
-        if ($reqBalance != null) {
+        if ($reqBalance !== null) {
             $user->setAttribute(User::FIELD_BALANCE, $reqBalance);
         }
 
-        if ($reqCommissionBalance != null) {
+        if ($reqCommissionBalance !== null) {
             $user->setAttribute(User::FIELD_COMMISSION_BALANCE, $reqCommissionBalance);
         }
 
