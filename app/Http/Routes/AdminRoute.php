@@ -38,7 +38,6 @@ class AdminRoute
                 $router->post('update', 'Admin\\Server\\TrojanController@update');
                 $router->post('copy', 'Admin\\Server\\TrojanController@copy');
                 $router->post('sort', 'Admin\\Server\\TrojanController@sort');
-                $router->post('viewConfig', 'Admin\\Server\\TrojanController@viewConfig');
             });
             $router->group([
                 'prefix' => 'server/v2ray'
@@ -49,7 +48,6 @@ class AdminRoute
                 $router->post('update', 'Admin\\Server\\V2rayController@update');
                 $router->post('copy', 'Admin\\Server\\V2rayController@copy');
                 $router->post('sort', 'Admin\\Server\\V2rayController@sort');
-                $router->post('viewConfig', 'Admin\\Server\\V2rayController@viewConfig');
             });
             $router->group([
                 'prefix' => 'server/shadowsocks'
