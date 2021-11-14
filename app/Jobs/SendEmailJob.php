@@ -25,7 +25,7 @@ class SendEmailJob implements ShouldQueue
      */
     public function __construct($params)
     {
-        $this->delay(now()->addSecond(2));
+        $this->delay(now()->addSeconds(2));
         $this->onQueue('send_email');
         $this->params = $params;
     }
