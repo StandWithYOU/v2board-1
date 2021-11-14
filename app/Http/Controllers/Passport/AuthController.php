@@ -150,9 +150,7 @@ class AuthController extends Controller
             $inviteUser =  User::find($inviteUserId);
 
             if ($packagePlan !== null || $inviteUser === null) {
-
-                $availableInvitePackageNumber = $user->calAvailableNumberWithInvitePackages();
-
+                $availableInvitePackageNumber = $inviteUser->calAvailableNumberWithInvitePackages();
                 if ($availableInvitePackageNumber > 0) {
                     //赠送流量
                     $inviteUser->buyPlan($packagePlan, null,  true );
