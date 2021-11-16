@@ -354,19 +354,22 @@ class User extends Model
         if ($recoveryLimit > 0) {
             switch ($recoveryConditionType) {
                 case 0: //被邀请人每次购买套餐
+                    $total = $total + ($this->countPaidInviteUsers(false) * $recoveryLimit);
+                    break;
+                case 1: //被邀请人首次购买套餐
                     $total = $total + ($this->countPaidInviteUsers() * $recoveryLimit);
                     break;
-                case 1: //被邀请人首次订阅变更
+                case 2: //被邀请人首次订阅变更
                     $total = $total + ($this->countInvitedUsersWithPlanChanged($registerPlanId) * $recoveryLimit);
                     break;
-                case 2: //被邀请人满足流量下限
+                case 3: //被邀请人满足流量下限
                     $total = $total + ($this->countInvitedUsersWithTrafficUsed($trafficLowerLimit) * $recoveryLimit);
                     break;
-                case 3: //被邀请人首次订阅变更并满足流量使用下限
+                case 4: //被邀请人首次订阅变更并满足流量使用下限
                     $total = $total + ($this->countInvitedUsersWithTrafficUsedAndPlanChanged($registerPlanId,
                             $trafficLowerLimit) * $recoveryLimit);
                     break;
-                case 4:
+                case 5:
                     $total = $total + ($this->countInvitedUsersWithTrafficUsedOrPlanChanged($registerPlanId,
                             $trafficLowerLimit) * $recoveryLimit);
                     break;
@@ -475,15 +478,25 @@ class User extends Model
     /**
      * count paid invite users
      *
+     * @param bool $mergeOrders
+     *
      * @return int
      */
-    public function countPaidInviteUsers(): int
+    public function countPaidInviteUsers(bool $mergeOrders = true): int
     {
         $total = 0;
         $inviteUsers = User::where(User::FIELD_INVITE_USER_ID, $this->getKey())->get()->all();
+        /**
+         * @var User $inviteUser
+         */
         foreach ($inviteUsers as $inviteUser) {
-            if ($inviteUser->countIncomeOrders() > 0) {
-                $total = $total + 1;
+            $countIncomeOrders = $inviteUser->countIncomeOrders();
+            if ($countIncomeOrders > 0) {
+                if ($mergeOrders) {
+                    $total = $total + 1;
+                } else {
+                    $total = $total + $countIncomeOrders;
+                }
             }
         }
         return $total;

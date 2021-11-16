@@ -11,7 +11,6 @@ use App\Utils\Helper;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -50,9 +49,9 @@ class UserController extends Controller
      * _filter
      *
      * @param Request $request
-     * @param Builder $builder
+     * @param User $builder
      */
-    private function _filter(Request $request,Builder $builder)
+    private function _filter(Request $request, $builder)
     {
         $reqFilter = (array)$request->input('filter');
         foreach ($reqFilter as $filter) {
@@ -618,7 +617,9 @@ class UserController extends Controller
                     //被邀请人订阅变化人数
                     'plan_changed_total' =>$user->countInvitedUsersWithPlanChanged($registerPlanId),
                     //被邀请人购买总单数
-                    'paid_order_total' => $user->countPaidInviteUsers(),
+                    'paid_order_total' => $user->countPaidInviteUsers(false),
+                     //被邀请人首次购买数
+                     'paid_order_first_total' => $user->countPaidInviteUsers(),
                      //被邀请人满足流量
                     'traffic_used_total' =>  $user->countInvitedUsersWithTrafficUsed($trafficLowerLimit),
                     //订阅变更并且流量满足
