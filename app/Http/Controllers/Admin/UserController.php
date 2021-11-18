@@ -199,8 +199,11 @@ class UserController extends Controller
         }
 
         $userEmail = $user->getAttribute(User::FIELD_EMAIL);
-        if (User::findByEmail($reqEmail) && $userEmail !== $reqEmail) {
-            abort(500, '邮箱已被使用');
+        if ($reqEmail) {
+            if (User::findByEmail($reqEmail) && $userEmail !== $reqEmail) {
+                abort(500, '邮箱已被使用');
+            }
+            $user->setAttribute(User::FIELD_EMAIL, $reqEmail);
         }
 
         if ($reqPassword) {

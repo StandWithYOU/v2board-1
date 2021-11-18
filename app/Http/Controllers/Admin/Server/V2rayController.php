@@ -62,6 +62,8 @@ class V2rayController extends Controller
         $server->setAttribute(Server::FIELD_PORT, $reqPort);
         $server->setAttribute(Server::FIELD_SERVER_PORT, $reqServerPort);
         $server->setAttribute(Server::FIELD_PARENT_ID, $reqParentId);
+        $server->setAttribute(Server::FIELD_NETWORK_SETTINGS, $reqNetworkSettings);
+
 
         if ($reqShow) {
             $server->setAttribute(Server::FIELD_SHOW, $reqShow);
@@ -78,12 +80,7 @@ class V2rayController extends Controller
         if ($reqRuleSettings) {
             $server->setAttribute(Server::FIELD_RULE_SETTINGS, $reqRuleSettings);
         }
-
-
-        if ($reqNetworkSettings) {
-            $server->setAttribute(Server::FIELD_NETWORK_SETTINGS, $reqNetworkSettings);
-        }
-
+        
         if ($reqTlsSettings) {
             $server->setAttribute(Server::FIELD_TLS_SETTINGS, $reqTlsSettings);
         }
