@@ -164,7 +164,7 @@ class Helper
      */
     public static function getSubscribeHost(): string
     {
-        $subscribeUrl = config('v2board.app_url', '');
+        $subscribeUrl = (string)config('v2board.app_url', '');
         $subscribeUrls = explode(',', config('v2board.subscribe_url'));
         if ($subscribeUrls && $subscribeUrls[0]) {
             $subscribeUrl = $subscribeUrls[rand(0, count($subscribeUrls) - 1)];
