@@ -33,4 +33,4 @@ ALTER TABLE `v2_user`
 ALTER TABLE `v2_plan`
     ADD `reset_traffic_method` tinyint(1) NULL AFTER `reset_price`;
 
-ALTER TABLE `v2board`.`v2_knowledge` ADD COLUMN `free` tinyint(1) NOT NULL DEFAULT 1  COMMENT '是否免费' AFTER `show`;
+ALTER TABLE `v2_knowledge` ADD COLUMN `free` tinyint(1) NOT NULL DEFAULT 1  COMMENT '是否免费' AFTER `show`;
