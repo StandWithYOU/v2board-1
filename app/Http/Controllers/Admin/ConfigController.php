@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\Admin\ConfigSave;
+use App\Jobs\SendEmailJob;
 use App\Services\TelegramService;
 use Artisan;
 use Config;
@@ -11,6 +12,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use App\Utils\Dict;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 
@@ -150,6 +152,41 @@ class ConfigController extends Controller
                     'android_download_url' => config('v2board.android_download_url')
                 ]
             ]
+        ]);
+    }
+
+
+    /**
+     * test send mail
+     *
+     * @param Request $request
+     * @return Application|ResponseFactory|Response
+     */
+    public function testSendMail(Request $request)
+    {
+        $email = $request->session()->get('email');
+        $subject = 'This is v2board test email';
+        $templateName =  'mail.' . config('v2board.email_template', 'default') . '.notify';
+        $templateValue =  [
+            'name' => config('v2board.app_name'),
+            'content' => 'This is v2board test email',
+            'url' => config('v2board.app_url')
+        ];
+
+        try {
+            Mail::send(
+                $templateName,
+                $templateValue,
+                function ($message) use ($email, $subject) {
+                    $message->to($email)->subject($subject);
+                }
+            );
+        } catch (\Exception $e) {
+            abort(500, $e->getMessage());
+        }
+
+        return response([
+            'data' => true,
         ]);
     }
 
