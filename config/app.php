@@ -172,10 +172,9 @@ return [
          */
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
-//        App\Providers\HorizonServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\EmailServiceProvider::class,
     ],
 
     /*
@@ -237,5 +236,5 @@ return [
     | The only modification by laravel config
     |
     */
-    'version' => '1.4.1'
+    'version' => '1.4.2'
 ];
