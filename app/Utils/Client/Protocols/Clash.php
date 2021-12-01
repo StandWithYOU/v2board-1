@@ -14,7 +14,7 @@ class Clash extends Protocol
         $servers = $this->servers;
         $user = $this->user;
         $reqFlags = $this->requestFlag;
-        $appName = config('v2board.app_name', 'V2Board');
+        $appName = urlencode(config('v2board.app_name', 'V2Board'));
         header("subscription-userinfo: upload={$user['u']}; download={$user['d']}; total={$user['transfer_enable']}; expire={$user['expired_at']}");
         header('profile-update-interval: 24');
         header("content-disposition: filename={$appName}");
